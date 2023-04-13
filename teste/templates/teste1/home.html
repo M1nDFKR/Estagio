@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h2>Tickets</h2>
+<p>Aqui estão os seus tickets</p>
+
+{% if tickets %}
+{% for ticket in tickets %}
+<div class="Ticket">
+    <h3>{{ ticket.title }}</h3>
+    <p>{{ ticket.description }}</p>
+    <p>Status: {{ ticket.status }}</p>
+</div>
+{% endfor %}
+{% else %}
+<p>No ticket found.</p>
+{% endif %}
+<h4>Comments</h4>
+{% for comment in ticket.comments.all %}
+  <p>{{ comment.text }} - by {{ comment.author.username }} on {{ comment.created_at }}</p>
+{% empty %}
+  <p>No comments yet.</p>
+{% endfor %}
+
+<form method="post">
+  {% csrf_token %}
+  <label for="comment">Add a comment:</label>
+  <textarea name="comment" id="comment"></textarea>
+  <button type="submit">Submit</button>
+</form>
+{% endblock %}
