@@ -8,53 +8,53 @@
 7 Se sim, reencaminhamos do seu email pessoal ou usamos o novo email como principal?
 
 ------------------------------------------------------------------------------
-É necessario enviar relatórios mensal?
-Se sim que tipos de dados deve ter?
+8 É necessario enviar relatórios mensal?
+9 Se sim que tipos de dados deve ter?
 --------------------------------------------------
 INTERFACE GRAFICA
 
-Será necessário vizualizar o website em diferentes dispositivos? 
-Se sim Em que tipos de dispositivos será vizualizados e como? Em que browers? (tamanhos, cor e etc)
+10 Será necessário vizualizar o website em diferentes dispositivos? 
+11 Se sim Em que tipos de dispositivos será vizualizados e como? Em que browers? (tamanhos, cor e etc)
 
-Será possivel vizualizar site como convidado?
-Se sim precisariamos de iniciar sessao(como no inovar por exemplo) para abrir um ticket?
+12 Será possivel vizualizar site como convidado?
+13 Se sim precisariamos de iniciar sessao(como no inovar por exemplo) para abrir um ticket?
 -----------------------------------------------
 
-Será necessario um sistema Admin/Utilizador? (SE SIM FAZER A PROX PERGUNTA)
-Que tipo de Utilizadores serão necessarias?(administrador, convidado, utilizador comum).
-Quais funcionalidades eles terão? As diferenças entre eles?
-Se for necessário Qualquer um pode registrar ou ser um Admin?
+14 Será necessario um sistema Admin/Utilizador? (SE SIM FAZER A PROX PERGUNTA)
+15 Que tipo de Utilizadores serão necessarias?(administrador, convidado, utilizador comum).
+16 Quais funcionalidades eles terão? As diferenças entre eles?
+17 Se for necessário Qualquer um pode registrar ou ser um Admin?
 ----------------------------------------------------------------
 
-8 Quais são as funcionalidades essenciais que o website deve oferecer?
-Devemos criar a opção de inserir tickets manualmente sem ser automático?
-9 Quais são as informações que devem ser coletadas do usuário ao abrir um ticket? 
-10 Sera necessário os usuários verificarem se seus tickets foram recebidos e registrados com sucesso? (uma mensagem no ecrã ou qualquer coisa do tipo)
-11 É necessario os usuários serem notificados sobre a resolução dos seus tickets?
-12 Como notificamos os administradores sobre a abertura e resolução dos tickets?
-13 Como os administradores do sistema serão capazes de gerenciar os tickets em aberto?
-14 Que tipos de tickets seram necessarios existir Ex:(reparação, pedidos, duvidas e suporte tecnico)?
-15 Quais são os estados do tickets?
-16 Como as informações do kit virtual da escola serão atualizadas no sistema?
-17 Precisamos atualizar passo a passo o tickets ao Admim e aos pais?
-Se Sim quando for necessarios atualizar os tickets terá de ter um processo automatizado ou manual? 
-18 Será preciso uma caixa de observação?(por exemplo criamos uma mensagem automatica mas deixamos sempre uma caixa
+18 Quais são as funcionalidades essenciais que o website deve oferecer?
+19 Devemos criar a opção de inserir tickets manualmente sem ser automático?
+20 Quais são as informações que devem ser coletadas do usuário ao abrir um ticket? 
+21 Sera necessário os usuários verificarem se seus tickets foram recebidos e registrados com sucesso? (uma mensagem no ecrã ou qualquer coisa do tipo)
+22 É necessario os usuários serem notificados sobre a resolução dos seus tickets?
+23 Como notificamos os administradores sobre a abertura e resolução dos tickets?
+24 Como os administradores do sistema serão capazes de gerenciar os tickets em aberto?
+25 Que tipos de tickets seram necessarios existir Ex:(reparação, pedidos, duvidas e suporte tecnico)?
+26 Quais são os estados do tickets?
+27 Como as informações do kit virtual da escola serão atualizadas no sistema?
+28 Precisamos atualizar passo a passo o tickets ao Admim e aos pais?
+29 Se Sim quando for necessarios atualizar os tickets terá de ter um processo automatizado ou manual? 
+30 Será preciso uma caixa de observação?(por exemplo criamos uma mensagem automatica mas deixamos sempre uma caixa
 de texto caso o utilizador queira deixar alguma nota para o Admim ou os encarregados de educação).
-19 Ira ser necessario um sistema de priorização de tickets? se sim como esse sistema funcionará?(EX: Por escalão)
-20 É necessario guardar um histórico de tickets?
-Se Sim, como os usuários poderão visualizar o histórico de seus tickets anteriores? E para os adminstradores?
-21 Como o sistema lidará com tickets duplicados ou redundantes?
+31 Ira ser necessario um sistema de priorização de tickets? se sim como esse sistema funcionará?(EX: Por escalão)
+32 É necessario guardar um histórico de tickets?
+33 Se Sim, como os usuários poderão visualizar o histórico de seus tickets anteriores? E para os adminstradores?
+34 Como o sistema lidará com tickets duplicados ou redundantes?
 -------------------------------------------------------------------------------------
 
-22 Como os usuários poderão fazer solicitações de recursos ou funcionalidades adicionais para o kit virtual da escola?
-23 Como o sistema lidará com solicitações de suporte técnico para mais de uma escola ou unidade de ensino?
-24 É necessario que os usuários possam fazer anexos de arquivos ou imagens relevantes aos seus tickets?
-25 Há prazos de entrega previsto para os tickets?
-Se sim Como o sistema lidará com tickets que não foram resolvidos dentro do prazo previsto?
-26 Como o sistema lidará com tickets que envolvem múltiplos problemas?
-27 Como o sistema lidará com solicitações de suporte técnico que exigem intervenção manual ou presencial, como a substituição de hardware defeituoso?
-28 Poderam haver tickets que precisam ser encaminhados para outras áreas da escola? 
-Se sim Como o sistema lidará com tickets que precisam ser encaminhados para outras áreas ou departamentos da escola?
+35 Como os usuários poderão fazer solicitações de recursos ou funcionalidades adicionais para o kit virtual da escola?
+36 Como o sistema lidará com solicitações de suporte técnico para mais de uma escola ou unidade de ensino?
+37 É necessario que os usuários possam fazer anexos de arquivos ou imagens relevantes aos seus tickets?
+38 Há prazos de entrega previsto para os tickets?
+39 Se sim Como o sistema lidará com tickets que não foram resolvidos dentro do prazo previsto?
+40 Como o sistema lidará com tickets que envolvem múltiplos problemas?
+41 Como o sistema lidará com solicitações de suporte técnico que exigem intervenção manual ou presencial, como a substituição de hardware defeituoso?
+42 Poderam haver tickets que precisam ser encaminhados para outras áreas da escola? 
+43 Se sim Como o sistema lidará com tickets que precisam ser encaminhados para outras áreas ou departamentos da escola?
 ------------------------------------------------------------------------------------------------------------------
 
 
