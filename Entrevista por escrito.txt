@@ -1,0 +1,47 @@
+Atualmente
+O tickets tem como anexar arquivos
+Na forma como eles aparecem na lista de emial fica dificil de ver, com isso não sabemos de qual assunto o ticket se retrata
+Qualquer um pode abrir um email se for através das credenciais dele
+Vão sempre para o memso email se não houver erros
+Os codigos atuais T9V-81V-U811 e (aparece o assunto relacionado ao tickect com o codigo xxxxxxxxxx)
+Os tickets pode ter varias respostas deles não nossas
+Duas categorias (Questões burocraticas e outra para a assistência técnica)
+
+	
+
+A fazer:
+Escencial:
+Espelhar na SPA exatamente os coneteudos que estão no gmail
+Uma app que estruturas os emails (as coisas) de forma que a reconsulta seja facíl e rápido, e que evite cada um fazer a sua maneira.
+Uma front-end da base de dados,
+""Vão surgir mais coisas""
+
+
+Adicional: ""Tentar juntar o ticket já existente quando for respondido (Pois atualmente ele gera um novo)""
+
+
+O QUE ELE QUER:
+	Logout (Automático);
+	Copia da grelha filtrada para qualquer filtro (PDF);
+	Lista de logins para PDF;
+	Logins criados por eles;
+	Logs;
+	Um sistema de login (sem limitações);
+	NSA = Número sequencial automático (isso é interno);
+	Numeração NSA acho que já existe eles é que fazem;
+	O Côdigo;
+	Assunto e dois cliques na linha um texto  sobre o tal;
+	Um filtro por assunto;
+		Não precisa ser cheque box, pode ser RadioButton;
+	Um filtro por data de registro;
+	Um filtro por codigo de tickets;
+	Comentários (com insert e select);
+	Um filtro por fornecedor(Mas não sabemos se atualmente essa informação existe se existir utilizamos);
+	
+	Adicional ""Agrupamento de tickets que se tratam do mesmo assunto (Logo quando geramos um novo para a resposta);""
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+da jeito ter as categorias na base de dados 
+texto do professor como comentario
