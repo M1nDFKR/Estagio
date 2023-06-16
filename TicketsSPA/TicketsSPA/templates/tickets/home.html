@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Home</title>
+</head>
+
+<body>
+    <h1>Bem-vindo à página home!</h1>
+    <ul>
+        {% for ticket in Tickets %}
+        <li>{{ ticket.title }} - {{ ticket.get_status_display }}</li>
+        {% empty %}
+        <li>Não há tickets no momento.</li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>
