@@ -7,13 +7,17 @@
 
 <body>
     <h1>Bem-vindo à página home!</h1>
-    <ul>
-        {% for ticket in Tickets %}
-        <li>{{ ticket.title }} - {{ ticket.get_status_display }}</li>
-        {% empty %}
-        <li>Não há tickets no momento.</li>
-        {% endfor %}
-    </ul>
-</body>
+    {% for email in emails %}
+    <li>
+      <strong>Subject:</strong> {{ email.subject }}<br>
+      <strong>Sender:</strong> {{ email.sender }}<br>
+      <strong>Recipient:</strong> {{ email.recipient }}<br>
+      <strong>Body:</strong> {{ email.body }}
+    </li>
+  {% empty %}
+    <li>Não exixtem tickets no momento  .</li>
+  {% endfor %}
+</ul>
+
 
 </html>

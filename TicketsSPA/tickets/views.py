@@ -5,11 +5,13 @@ from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from .models import Ticket
+from django.shortcuts import render
+from .gmail_mirror import get_emails
 
 
 class LoginView(TemplateView):
     template_name = 'login.html'
-    
+
     def post(self, request, *args, **kwargs):
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -19,6 +21,7 @@ class LoginView(TemplateView):
             return redirect('home')
         else:
             return render(request, self.template_name)
+
 
 class HomeView(TemplateView):
     template_name = 'home/home.html'
@@ -30,7 +33,9 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['tickets'] = Ticket.objects.all()
+        context['emails'] = get_emails()
         return context
+
 
 @login_required
 def logout_view(request):

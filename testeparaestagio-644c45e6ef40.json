@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "testeparaestagio",
+  "private_key_id": "644c45e6ef40e2ed4db7c842c4ccce9b7deb8662",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDMd4NoRbi43knp\n1h6d+lmW4gJmQcabO0bW3tIY6hIvMrQJqTOJlrfc99Yji4xdCkURUuShv9XCKTBQ\nsOULsYpkOg2OfMNdigyKJwmNgAst445JhJmSO3bWTMcssv685gl8Szj3om1MY414\nV69Yo6QV9Z7IctgnKNNX01/p8anWf2OGiXYbkU1NNZsOHwfZC/22CHFPTcCKGH5X\n4Q7rxj32ha04ZH4kat+PUuumy2KFQDkVvReKplbgevAV3SiHXrLaJ3BDnXfR/rdp\nr34Bt0Fq7pRsdNZ+H+MnwTBoyFVZum3EItWxWZ4CcfWefPwbgziK38oEomR7bMTr\n7El5i38vAgMBAAECggEAX094sGMLxBVOhBOdKwv3thc9ghg4McU0dNXiPt3hwyGR\n/gzi6siYhYb7yY7zy60NXBF1ZRbM2Fil3n9PDZ/hgG31Qs3Sreg7hyzCTbT5wRbZ\njVij06AneabJk4MOrtRWaJuR/xE2fMzNNeM96AZD5z6bGRo7uylTNxXfmGhfwI3E\n4Lg4jkVmtFFi6erUzjSSFGB1uyNznVkil01O6i6jVmWEUeVGFvKCm5O1mLfVwoHM\nRj6TJ0g1DtjBT+pCEIQOVbwUYNsBTVw40JJugGhFcWK4EW6F8jfI8mSap65raIuN\npoV+Am1zLWNeSfE5aQvrACZ1pZz0owH772cW84eM5QKBgQDrKo4SPd2xLVNP/rQm\npoKs7AQ+RLNVsIrfAEfD2ViEhdfk0qGrg0+3u6aD+je73xj22cbgg2efEXNsPq3j\nd8iKhHqIgQGpYfMovSKr5hpCycnERCNqP54oMOgayO+9aWt4PILya5w/aHeCXOHn\nR4kTtDH73GYncFLiiYJ4d715nQKBgQDelLZzdgKBm+AjPJZExUS6dqyiIMMcqdLf\nu8FqA78msSrJi9i8dnkI1D6sde6wlJnuKcDuvaRN0ewGCns0MbQ+ELshD+WaJxxp\ncsPKuO4REnrVJGmLlB0A1Gb3pbYZ8I9mAN8OBdomM8o6GEJwzHlzOAg2gr/TNM1p\nDKhz6hTYOwKBgDUcQkPKZxQJqYQqgOMtvdtx3i918o6KtYJRnOOVZZFgbPbHvy1u\nFYXoQl4SF549b3TokCrKYo+hMFElAr6ZodfuvYGwqQBpF7J+rKLn78xfqErEHL91\nKLHpAbJy6Pn9IgFgoS5AsWP8ouj1Myu5kzK5AoTgLM4BZya0aZvtZwRdAoGAJUAO\nKNSfJsHHiR4ip++7yNkDmz6QaMOjHv51KCDoZLlRx9k3tJK/PtMGiiZShAramBk0\nyL/EN6HiNkCazeljmN+D8cyPSHUzNBKY4dyBOyo0lGc7orhvAiyJ7vg0ubKgzRlo\nOxiPocUZGw/kTqxpxvahqT3IjLhRiDsuFfge9PECgYEArWkFm9nmT+YBCcjFatOt\njbkn9n23Rq8XZxlagJUaRcgs7+9HqAjSN/Furl0ve2JJsOcdC9E+7I4PYC7OT/LG\n/QcQ6NMGssM2eZRY+T9KAuQEQYp535Xoeb3UAwr2E52ZeyV9/WG98FWAoamHhXw+\nr12Dtxcf/ApYe8k+fNU3qb0=\n-----END PRIVATE KEY-----\n",
+  "client_email": "nomequalquer123@testeparaestagio.iam.gserviceaccount.com",
+  "client_id": "104365143656639284037",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/nomequalquer123%40testeparaestagio.iam.gserviceaccount.com"
+}
