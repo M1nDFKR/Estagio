@@ -11,10 +11,12 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            flex-direction: column;
         }
 
         .login-container {
             max-width: 300px;
+            text-align: center;
         }
 
         /* Custom styles */
@@ -42,6 +44,15 @@
             border: none;
             padding: 0;
         }
+
+        .kit-escola-digital {
+            font-weight: bold;
+            font-size: 22px; /* Aumenta o tamanho da fonte para 20 pixels */
+        }
+
+        .login {
+            font-size: 25px; /* Aumenta o tamanho da fonte para 24 pixels */
+        }
     </style>
 </head>
 
@@ -51,7 +62,8 @@
             <!-- Add the image tag here -->
             {% load static %}
             <img src="{% static 'login/alpoente.png' %}" alt="My Image">
-            <h2 class="text-center mt-3">Login</h2>
+            <p class="kit-escola-digital">Kit Escola Digital</p>
+            <p class="login">Login</p>
             {% if error_message %}
             <p class="text-center">{{ error_message }}</p>
             {% endif %}
