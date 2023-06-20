@@ -13,7 +13,13 @@
         <div class="list-group">
             {% for t in tickets %}
             <div class="list-group-item">
-                <h4 class="mb-1">{{ t }}</h4>
+                <h4 class="mb-1">{{ t.id }}</h4>
+                <h4 class="mb-1">{{ t.title }}</h4>
+                <h4 class="mb-1">{{ t.user }}</h4>
+                <h4 class="mb-1">{{ t.code }}</h4>
+                <img src="{{ t.files }}" class="mb-1">
+                <h4 class="mb-1"> {{ t.files }}</h4>
+                <h4 class="mb-1">{{ t.responses }}</h4>
             </div>
             {% empty %}
             <div class="list-group-item">Não exixtem tickets no momento.</div>

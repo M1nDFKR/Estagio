@@ -35,6 +35,10 @@ class HomeView(TemplateView):
         context['tickets'] = Ticket.objects.all()
         context['emails'] = get_emails()
         return context
+    
+""" for ticket in context['tickets']:
+            ticket.relative_image_path = f"tickets/{ticket.}"  # Replace with the correct relative path
+        return context """
 
 
 @login_required

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.db import models
 
 class Ticket(models.Model):
     title = models.CharField(max_length=100)
@@ -13,6 +13,10 @@ class Ticket(models.Model):
     )
     status = models.CharField(
         max_length=1, choices=STATUS_CHOICES, default='A')
+    code = models.CharField(max_length=12)  # Adiciona o campo para o código
+    # Adiciona o campo para os arquivos
+    files = models.FileField(upload_to='static/uploads')
+    responses = models.TextField()  # Adiciona o campo para as respostas
 
     def __str__(self):
         return self.title
