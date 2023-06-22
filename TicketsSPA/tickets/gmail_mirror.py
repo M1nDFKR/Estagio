@@ -53,26 +53,31 @@ def create_ticket_instances(emails):
         else:
             code = ""
 
+        # Check if a ticket with the same subject already exists
+        existing_ticket = Ticket.objects.filter(title=subject).first()
+
+        if existing_ticket:
+            # If a ticket with the same subject exists, update its details
+            existing_ticket.subject_from_email = body
+            existing_ticket.save()
+            ticket_instance = existing_ticket
+        else:
+            # Create a new ticket instance
+            ticket_instance = Ticket.objects.create(
+                title=subject,
+                subject_from_email=body,
+                code=code
+            )
+
         # Create an instance of the Email model
         email_instance = Email.objects.create(
             assunto=subject,
-            corpo=body
+            corpo=body,
+            ticket=ticket_instance
         )
-
-        # Create an instance of the Ticket model
-        ticket_instance = Ticket.objects.create(
-            title=subject,
-            subject_from_email=body
-        )
-
-        # Associate the code extracted from the subject with the ticket
-        ticket_instance.associate_code_from_email(code)
 
         # Check if the subject contains "fechado/resolvido"
         if "fechado/resolvido" in subject.lower():
             ticket_instance.status = 'F'  # Update status to "Fechado"
             ticket_instance.save()
 
-        # Associate the email_instance with the ticket_instance
-        email_instance.ticket = ticket_instance
-        email_instance.save()
