@@ -45,44 +45,6 @@ class HomeView(TemplateView):
         return context
 
 
-'''
-class HomeView(TemplateView):
-    template_name = 'home/home.html'
-    paginate_by = 5  # Number of tickets per page
-
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['tickets'] = Ticket.objects.all()
-        context['emails'] = get_emails()
-        return context
-
-
-'''
-class HomeView(TemplateView):
-    template_name = 'home/home.html'
-
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        emails = get_emails()
-        create_ticket_instances(emails)
-        context['tickets'] = Ticket.objects.all()
-        context['emails'] = Email.objects.all()
-        return context
-    
-""" for ticket in context['tickets']:
-            ticket.relative_image_path = f"tickets/{ticket.}"  # Replace with the correct relative path
-        return context """
-'''
-
-
 @login_required
 def logout_view(request):
     logout(request)
