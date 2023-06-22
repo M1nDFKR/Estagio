@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Seu título</title>
+    <title>{% block title %}Seu título{% endblock %}</title>
     <!-- CSS do Bootstrap -->
+    {% block css %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    {% endblock %}
 </head>
-<body>
-    <!-- Seu conteúdo aqui -->
 
+<body>
+    {% block content %}
+    <!-- Seu conteúdo aqui -->
+    {% endblock %}
+    
     <!-- jQuery (necessário para os plugins JavaScript do Bootstrap) -->
+    {% block js %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- JS do Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    {% endblock %}
 </body>
 </html>
+

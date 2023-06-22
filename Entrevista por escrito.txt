@@ -32,7 +32,7 @@ O QUE ELE QUER:
 	O Côdigo;
 	Assunto e dois cliques na linha um texto  sobre o tal;
 	Um filtro por assunto;
-		Não precisa ser cheque box, pode ser RadioButton;
+		Não precisa ser cheque box, pode ser RadialButton;
 	Um filtro por data de registro;
 	Um filtro por codigo de tickets;
 	Comentários (com insert e select);
