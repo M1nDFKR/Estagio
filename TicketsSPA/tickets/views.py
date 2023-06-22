@@ -4,9 +4,9 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from .models import Ticket
-from django.shortcuts import render
+from .models import Ticket, Email
 from .gmail_mirror import get_emails
+from .gmail_mirror import create_ticket_instances
 
 
 class LoginView(TemplateView):
@@ -32,13 +32,11 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        emails = get_emails()
+        create_ticket_instances(emails)
         context['tickets'] = Ticket.objects.all()
-        context['emails'] = get_emails()
+        context['emails'] = Email.objects.all()
         return context
-    
-""" for ticket in context['tickets']:
-            ticket.relative_image_path = f"tickets/{ticket.}"  # Replace with the correct relative path
-        return context """
 
 
 @login_required

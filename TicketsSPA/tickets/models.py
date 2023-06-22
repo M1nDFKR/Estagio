@@ -1,10 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db import models
+import re
 
 class Ticket(models.Model):
     title = models.CharField(max_length=100)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     STATUS_CHOICES = (
@@ -13,13 +13,26 @@ class Ticket(models.Model):
     )
     status = models.CharField(
         max_length=1, choices=STATUS_CHOICES, default='A')
-    code = models.CharField(max_length=12)  # Adiciona o campo para o código
-    # Adiciona o campo para os arquivos
-    files = models.FileField(upload_to='static/uploads')
-    responses = models.TextField()  # Adiciona o campo para as respostas
+    code = models.CharField(max_length=12)
+    files = models.FileField(upload_to='static/uploads',
+                             blank=True)
+    responses = models.TextField()
+    subject_from_email = models.TextField(blank=True)
+
+    def associate_code_from_email(self, code):
+        self.code = code
+        self.save()
 
     def __str__(self):
         return self.title
+
+
+class Email(models.Model):
+    assunto = models.CharField(max_length=255)
+    corpo = models.TextField()
+
+    def __str__(self):
+        return self.assunto
 
 
 class Comment(models.Model):
