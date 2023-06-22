@@ -1,36 +1,156 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Home</title>
-    <!-- CSS do Bootstrap 5 -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0-beta1/css/bootstrap.min.css" rel="stylesheet">
-</head>
+{% block title %}
+Home
+{% endblock %}
 
-<body>
-    <div class="container py-5">
-        <h1 class="mb-5">Bem-vindo à página home!</h1>
-        <div class="list-group">
-            {% for t in tickets %}
-            <div class="list-group-item">
-                <h4 class="mb-1">{{ t.id }}</h4>
-                <h4 class="mb-1">{{ t.title }}</h4>
-                <h4 class="mb-1">{{ t.user }}</h4>
-                <h4 class="mb-1">{{ t.code }}</h4>
-                <img src="{{ t.files }}" class="mb-1">
-                <h4 class="mb-1"> {{ t.files }}</h4>
-                <h4 class="mb-1">{{ t.responses }}</h4>
-            </div>
-            {% empty %}
-            <div class="list-group-item">Não exixtem tickets no momento.</div>
-            {% endfor %}
+{% block css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    .navbar-custom {
+        background-color: #212529;
+    }
+
+    .navbar-logo {
+        width: 75px;
+        height: 35px;
+    }
+
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+    }
+
+    .pagination {
+        justify-content: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'login/background.png' %}" class="navbar-logo">
+                <span class="ms-2">Kit Escola Digital</span>
+            </a>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Logout</a>
+                </li>
+            </ul>
         </div>
     </div>
+</nav>
 
-    <!-- JS, Popper.js e jQuery do Bootstrap 5-->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0-beta1/js/bootstrap.min.js"></script>
-</body>
+<div class="container py-5">
+    <h1 class="mb-5">Tickets Kit Escola Digital</h1>
+    <div id="ticket-list" class="list-group">
+        {% for t in tickets %}
+        <div class="list-group-item">
+            <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#ticket{{ t.id }}"
+                aria-expanded="false" aria-controls="ticket{{ t.id }}" onclick="toggleCollapse(this)">
+                <h4 class="mb-1">{{ t.title }}</h4>
+            </button>
+            <div id="ticket{{ t.id }}" class="collapse">
+                <p>ID: {{ t.id }}</p>
+                <p>User: {{ t.user }}</p>
+                <p>Code: {{ t.code }}</p>
+                <img src="{{ t.files }}" class="mb-1">
+                <p>Responses: {{ t.responses }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <div class="list-group-item">Não existem tickets no momento.</div>
+        {% endfor %}
+    </div>
 
-</html>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if tickets.has_previous %}
+            <li class="page-item">
+                <a class="page-link pagination-link" href="?page={{ tickets.previous_page_number }}">Anterior</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Anterior</span>
+            </li>
+            {% endif %}
+            {% for num in tickets.paginator.page_range %}
+            {% if tickets.number == num %}
+            <li class="page-item active">
+                <span class="page-link">{{ num }}</span>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link pagination-link" href="?page={{ num }}">{{ num }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% if tickets.has_next %}
+            <li class="page-item">
+                <a class="page-link pagination-link" href="?page={{ tickets.next_page_number }}">Próxima</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Próxima</span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+<!-- JS, Popper.js e jQuery do Bootstrap 5 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+
+<script>
+    function toggleCollapse(button) {
+        var target = document.querySelector(button.getAttribute("data-bs-target"));
+        var isExpanded = target.classList.contains("show");
+
+        if (isExpanded) {
+            $(target).collapse('hide');
+            button.setAttribute("aria-expanded", "false");
+        } else {
+            $(target).collapse('show');
+            button.setAttribute("aria-expanded", "true");
+        }
+    }
+
+    $(document).on('click', '.pagination-link', function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        loadTickets(url);
+        // Update URL without page reload
+        window.history.pushState(null, '', url);
+    });
+
+    function loadTickets(url) {
+        $.ajax({
+            url: url,
+            method: 'GET',
+            success: function (data) {
+                var $data = $(data);  // Convert the returned HTML string to a jQuery object
+                var ticketList = $data.find('#ticket-list').html();  // Extract the ticket list HTML
+                var pagination = $data.find('.pagination').html();  // Extract the pagination HTML
+
+                $('#ticket-list').html(ticketList);  // Update the ticket list content
+                $('.pagination').html(pagination);  // Update the pagination links
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.log(errorThrown);
+            }
+        });
+    }
+</script>
+{% endblock %}
