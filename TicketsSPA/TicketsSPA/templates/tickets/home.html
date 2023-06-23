@@ -47,6 +47,29 @@ Home
                     <a class="nav-link" href="{% url 'login' %}">Logout</a>
                 </li>
             </ul>
+<body>
+    <div class="container py-5">
+        <h1 class="mb-5">Bem-vindo à página home!</h1>
+        <div class="list-group">
+            <!-- {% for t in tickets %}
+            <div class="list-group-item">
+                <h4 class="mb-1">{{ t.id }}</h4>
+                <h4 class="mb-1">{{ t.title }}</h4>
+                <h4 class="mb-1">{{ t.user }}</h4>
+                <h4 class="mb-1">{{ t.code }}</h4>
+                <img src="{{ t.files }}" class="mb-1">
+                <h4 class="mb-1"> {{ t.files }}</h4>
+                <h4 class="mb-1">{{ t.responses }}</h4> -->
+                {% for t in tickets %}
+                <h3>{{ t.code }}</h3>
+                <p>{{ t.title }}</p>
+                <p>{{ t.subject_from_email }}</p>
+                <p>{{ t.status }}</p>
+                {% endfor %}
+            </div>
+            {% empty %}
+            <div class="list-group-item">Não exixtem tickets no momento.</div>
+            {% endfor %}
         </div>
     </div>
 </nav>

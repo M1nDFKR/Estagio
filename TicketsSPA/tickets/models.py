@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from mptt.models import MPTTModel, TreeForeignKey
+from django.db import models
 import re
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
@@ -16,10 +16,10 @@ class Ticket(MPTTModel):
     )
     status = models.CharField(
         max_length=1, choices=STATUS_CHOICES, default='A')
-    code = models.CharField(max_length=14)
+    code = models.CharField(max_length=12)
     files = models.FileField(upload_to='static/uploads',
                              blank=True)
-    responses = models.TextField(blank=True)
+    responses = models.TextField()
     subject_from_email = models.TextField(blank=True)
     level = models.IntegerField(default=0)
     lft = models.IntegerField(default=0)

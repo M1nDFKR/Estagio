@@ -56,6 +56,15 @@ def create_ticket_instances(emails):
         # Check if a ticket with the same code already exists
         existing_tickets = Ticket.all_tickets.filter(code=code)
 
+        # Create an instance of the Ticket model
+        ticket_instance = Ticket.objects.create(
+            title=subject,
+            subject_from_email=body
+        )
+
+        # Associate the code extracted from the subject with the ticket
+        ticket_instance.associate_code_from_email(code)
+
         # Check if the subject contains "fechado/resolvido"
         if "fechado/resolvido" in subject.lower():
             if existing_tickets.exists():
