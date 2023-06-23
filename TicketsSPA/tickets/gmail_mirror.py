@@ -2,7 +2,7 @@ import imapclient
 import email
 import re
 from email.header import decode_header
-from .models import Ticket
+from .models import Ticket, TicketThread
 
 EMAIL = "prometonaoescam@gmail.com"
 PASSWORD = "wmmcblxzxvcocuyz"
@@ -63,11 +63,15 @@ def create_ticket_instances(emails):
             ticket_instance = existing_ticket
         else:
             # Create a new ticket instance
-            ticket_instance = Ticket.objects.create(
-                title=subject,
-                subject_from_email=body,
-                code=code
-            )
+            ticket_instance = Ticket(
+                title=subject, subject_from_email=body, code=code)
+
+            if code:
+                ticket_thread, _ = TicketThread.objects.get_or_create(
+                    thread_code=code)
+                ticket_instance.thread = ticket_thread
+
+            ticket_instance.save()
 
         # Check if the subject contains "fechado/resolvido"
         if "fechado/resolvido" in subject.lower():

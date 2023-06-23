@@ -33,7 +33,7 @@ Home
     <div class="container-fluid">
         <div class="d-flex align-items-center">
             <a class="navbar-brand" href="#">
-                <img src="{% static 'login/background.png' %}" class="navbar-logo">
+                <img src="{% static 'login/logo.png' %}" class="navbar-logo">
                 <span class="ms-2">Kit Escola Digital</span>
             </a>
         </div>
@@ -53,25 +53,45 @@ Home
 
 <div class="container py-5">
     <h1 class="mb-5">Tickets Kit Escola Digital</h1>
-    <div id="ticket-list" class="list-group">
-        {% for t in tickets %}
+    <div id="thread-list" class="list-group">
+        {% for t in threads %}
         <div class="list-group-item">
-            <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#ticket{{ t.id }}"
-                aria-expanded="false" aria-controls="ticket{{ t.id }}" onclick="toggleCollapse(this)">
-                <h4 class="mb-1">{{ t.title }}</h4>
+            <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#t{{ t.id }}" aria-expanded="false"
+                aria-controls="t{{ t.id }}" onclick="toggleCollapse(this)">
+                <h4 class="mb-1">{{ t.thread_code }}</h4>
             </button>
-            <div id="ticket{{ t.id }}" class="collapse">
+            <div id="t{{ t.id }}" class="collapse">
                 <p>ID: {{ t.id }}</p>
-                <p>User: {{ t.user }}</p>
-                <p>Code: {{ t.code }}</p>
-                <img src="{{ t.files }}" class="mb-1">
-                <p>Responses: {{ t.responses }}</p>
+                <p>Code: {{ t.thread_code }}</p>
+                <p>Created: {{ t.created_at }}</p>
+                <p>Tickets:</p>
+                <ul>
+                    {% for ticket in t.tickets.all %}
+                    <li>{{ ticket.title }}</li>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
         {% empty %}
         <div class="list-group-item">Não existem tickets no momento.</div>
         {% endfor %}
+    </div>
+
+    <h1 class="mt-5">Ticket Threads</h1>
+    <div id="thread-list" class="list-group">
+        {% for ticket_thread in ticket_threads %}
+        <div class="list-group-item">
+            <h4 class="mb-1">{{ ticket_thread.title }}</h4>
+            <ul>
+                {% for ticket in ticket_thread.tickets.all %}
+                <li>{{ ticket.title }}</li>
+                {% endfor %}
+            </ul>
         </div>
+        {% empty %}
+        <div class="list-group-item">Não existem threads no momento.</div>
+        {% endfor %}
+    </div>
 
     <nav aria-label="Page navigation">
         <ul class="pagination">
@@ -142,9 +162,11 @@ Home
             success: function (data) {
                 var $data = $(data);  // Convert the returned HTML string to a jQuery object
                 var ticketList = $data.find('#ticket-list').html();  // Extract the ticket list HTML
+                var threadList = $data.find('#thread-list').html();  // Extract the thread list HTML
                 var pagination = $data.find('.pagination').html();  // Extract the pagination HTML
 
                 $('#ticket-list').html(ticketList);  // Update the ticket list content
+                $('#thread-list').html(threadList);  // Update the thread list content
                 $('.pagination').html(pagination);  // Update the pagination links
             },
             error: function (xhr, textStatus, errorThrown) {

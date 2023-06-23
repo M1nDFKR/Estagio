@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from .models import Ticket
+from .models import Ticket, TicketThread
 from .gmail_mirror import get_emails
 from .gmail_mirror import create_ticket_instances
 from django.core.paginator import Paginator
@@ -37,12 +37,13 @@ class HomeView(TemplateView):
         emails = get_emails()
         create_ticket_instances(emails)
         tickets = Ticket.objects.all()
-        paginator = Paginator(tickets, self.paginate_by)
+        threads = TicketThread.objects.all()
+        paginator = Paginator(threads, self.paginate_by)
 
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
-        context['tickets'] = page_obj
+        context['threads'] = page_obj
 
         return context
 

@@ -5,7 +5,18 @@ import re
 from django.db import models
 
 
+class TicketThread(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    thread_code = models.CharField(max_length=14, null=True)
+
+    def __str__(self):
+        return f"Thread ID: {self.id}"
+
+
 class Ticket(models.Model):
+    thread = models.ForeignKey(
+        TicketThread, on_delete=models.CASCADE, related_name='tickets')
     title = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -16,14 +27,9 @@ class Ticket(models.Model):
     status = models.CharField(
         max_length=1, choices=STATUS_CHOICES, default='A')
     code = models.CharField(max_length=14)
-    files = models.FileField(upload_to='static/uploads',
-                             blank=True)
+    files = models.FileField(upload_to='static/uploads', blank=True)
     responses = models.TextField(blank=True)
     subject_from_email = models.TextField(blank=True)
-
-    def associate_code_from_email(self, code):
-        self.code = code
-        self.save()
 
     def __str__(self):
         return self.title
