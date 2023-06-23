@@ -69,15 +69,7 @@ def create_ticket_instances(emails):
                 code=code
             )
 
-        # Create an instance of the Email model
-        email_instance = Email.objects.create(
-            assunto=subject,
-            corpo=body,
-            ticket=ticket_instance
-        )
-
         # Check if the subject contains "fechado/resolvido"
         if "fechado/resolvido" in subject.lower():
             ticket_instance.status = 'F'  # Update status to "Fechado"
             ticket_instance.save()
-
