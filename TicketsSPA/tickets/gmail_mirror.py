@@ -2,7 +2,7 @@ import imapclient
 import email
 import re
 from email.header import decode_header
-from .models import Email, Ticket
+from .models import Ticket
 
 EMAIL = "prometonaoescam@gmail.com"
 PASSWORD = "wmmcblxzxvcocuyz"
@@ -53,31 +53,28 @@ def create_ticket_instances(emails):
         else:
             code = ""
 
-        # Check if a ticket with the same subject already exists
-        existing_ticket = Ticket.objects.filter(title=subject).first()
-
-        if existing_ticket:
-            # If a ticket with the same subject exists, update its details
-            existing_ticket.subject_from_email = body
-            existing_ticket.save()
-            ticket_instance = existing_ticket
-        else:
-            # Create a new ticket instance
-            ticket_instance = Ticket.objects.create(
-                title=subject,
-                subject_from_email=body,
-                code=code
-            )
-
-        # Create an instance of the Email model
-        email_instance = Email.objects.create(
-            assunto=subject,
-            corpo=body,
-            ticket=ticket_instance
-        )
+        # Check if a ticket with the same code already exists
+        existing_tickets = Ticket.all_tickets.filter(code=code)
 
         # Check if the subject contains "fechado/resolvido"
         if "fechado/resolvido" in subject.lower():
-            ticket_instance.status = 'F'  # Update status to "Fechado"
-            ticket_instance.save()
+            if existing_tickets.exists():
+                # Update all tickets with the same code to "Fechado"
+                existing_tickets.update(status='F')
+        else:
+            # If tickets with the same code exist, the parent ticket is the latest one.
+            parent_ticket = existing_tickets.order_by('-created_at').first()
 
+            # Check if a ticket with the same subject exists, if it does, update the existing one.
+            ticket_instance = existing_tickets.filter(title=subject).first()
+            if ticket_instance:
+                ticket_instance.subject_from_email = body
+                ticket_instance.save()
+            else:
+                # If no ticket with the same subject exists, create a new one.
+                ticket_instance = Ticket.all_tickets.create(
+                    title=subject,
+                    subject_from_email=body,
+                    code=code,
+                    parent=parent_ticket
+                )

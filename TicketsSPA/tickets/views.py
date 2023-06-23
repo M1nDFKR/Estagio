@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from .models import Ticket, Email
+from .models import Ticket
 from .gmail_mirror import get_emails
 from .gmail_mirror import create_ticket_instances
 from django.core.paginator import Paginator
@@ -26,7 +26,7 @@ class LoginView(TemplateView):
 
 class HomeView(TemplateView):
     template_name = 'home/home.html'
-    paginate_by = 5  # Number of tickets per page
+    paginate_by = 8  # Number of tickets per page
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -34,14 +34,15 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        tickets = Ticket.objects.all()
-        paginator = Paginator(tickets, self.paginate_by)
-
+        emails = get_emails()
+        create_ticket_instances(emails)
+        root_tickets = Ticket.objects.all()  
+        
+        paginator = Paginator(root_tickets, self.paginate_by)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
         context['tickets'] = page_obj
-        context['emails'] = get_emails()
         return context
 
 
