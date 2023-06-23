@@ -26,7 +26,7 @@ class LoginView(TemplateView):
 
 class HomeView(TemplateView):
     template_name = 'home/home.html'
-    paginate_by = 8  # Number of tickets per page
+    paginate_by = 5  # Number of tickets per page
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -36,13 +36,14 @@ class HomeView(TemplateView):
         context = super().get_context_data(**kwargs)
         emails = get_emails()
         create_ticket_instances(emails)
-        root_tickets = Ticket.objects.all()  
-        
-        paginator = Paginator(root_tickets, self.paginate_by)
+        tickets = Ticket.objects.all()
+        paginator = Paginator(tickets, self.paginate_by)
+
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
         context['tickets'] = page_obj
+
         return context
 
 

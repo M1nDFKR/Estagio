@@ -3,10 +3,9 @@ from django.contrib.auth.models import User
 from django.db import models
 import re
 from django.db import models
-from mptt.models import MPTTModel, TreeForeignKey
 
 
-class Ticket(MPTTModel):
+class Ticket(models.Model):
     title = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -16,22 +15,11 @@ class Ticket(MPTTModel):
     )
     status = models.CharField(
         max_length=1, choices=STATUS_CHOICES, default='A')
-    code = models.CharField(max_length=12)
+    code = models.CharField(max_length=14)
     files = models.FileField(upload_to='static/uploads',
                              blank=True)
-    responses = models.TextField()
+    responses = models.TextField(blank=True)
     subject_from_email = models.TextField(blank=True)
-    level = models.IntegerField(default=0)
-    lft = models.IntegerField(default=0)
-    rght = models.IntegerField(default=0)
-    tree_id = models.IntegerField(default=0)
-    parent = TreeForeignKey(
-        'self', on_delete=models.SET_NULL, null=True, blank=True, related_name='next_ticket')
-
-    all_tickets = models.Manager()
-
-    class MPTTMeta:
-        order_insertion_by = ['created_at']
 
     def associate_code_from_email(self, code):
         self.code = code

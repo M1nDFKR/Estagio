@@ -33,7 +33,7 @@ Home
     <div class="container-fluid">
         <div class="d-flex align-items-center">
             <a class="navbar-brand" href="#">
-                <img src="{% static 'login/Logo.png' %}" class="navbar-logo">
+                <img src="{% static 'login/background.png' %}" class="navbar-logo">
                 <span class="ms-2">Kit Escola Digital</span>
             </a>
         </div>
@@ -47,68 +47,30 @@ Home
                     <a class="nav-link" href="{% url 'login' %}">Logout</a>
                 </li>
             </ul>
-<body>
-    <div class="container py-5">
-        <h1 class="mb-5">Bem-vindo à página home!</h1>
-        <div class="list-group">
-            <!-- {% for t in tickets %}
-            <div class="list-group-item">
-                <h4 class="mb-1">{{ t.id }}</h4>
-                <h4 class="mb-1">{{ t.title }}</h4>
-                <h4 class="mb-1">{{ t.user }}</h4>
-                <h4 class="mb-1">{{ t.code }}</h4>
-                <img src="{{ t.files }}" class="mb-1">
-                <h4 class="mb-1"> {{ t.files }}</h4>
-                <h4 class="mb-1">{{ t.responses }}</h4> -->
-                {% for t in tickets %}
-                <h3>{{ t.code }}</h3>
-                <p>{{ t.title }}</p>
-                <p>{{ t.subject_from_email }}</p>
-                <p>{{ t.status }}</p>
-                {% endfor %}
-            </div>
-            {% empty %}
-            <div class="list-group-item">Não exixtem tickets no momento.</div>
-            {% endfor %}
         </div>
     </div>
 </nav>
 
-{% load mptt_tags %}
 <div class="container py-5">
     <h1 class="mb-5">Tickets Kit Escola Digital</h1>
     <div id="ticket-list" class="list-group">
-        {% if tickets %}
-        {% recursetree tickets %}
+        {% for t in tickets %}
         <div class="list-group-item">
-            <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#ticket{{ node.id }}"
-                aria-expanded="false" aria-controls="ticket{{ node.id }}" onclick="toggleCollapse(this)">
-                <h4 class="mb-1">{{ node.title }}</h4>
+            <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#ticket{{ t.id }}"
+                aria-expanded="false" aria-controls="ticket{{ t.id }}" onclick="toggleCollapse(this)">
+                <h4 class="mb-1">{{ t.title }}</h4>
             </button>
-            <div id="ticket{{ node.id }}" class="collapse">
-                <p>Assunto: {{ node.title}}</p>
-                <p>Code: {{ node.code }}</p>
-                <p>Status: {{ node.get_status_display }}</p>
-                <p>Corpo: {{ node.subject_from_email }}</p>
-                <p>Responses: {{ node.responses }}</p>
-                {% if not node.is_leaf_node %}
-                <div class="ml-3"> {# nested items will be indented 3em #}
-                    <p>Sub tickets:</p>
-                    {% for child in node.children.all %}
-                    <p>ID: {{ child.id }} - Title: {{ child.title }}</p>
-                    {% endfor %}
-                    {{ children }}
-                </div>
-                {% endif %}
-            </div>
-            </div>
-            {% endrecursetree %}
+            <div id="ticket{{ t.id }}" class="collapse">
+                <p>ID: {{ t.id }}</p>
+                <p>User: {{ t.user }}</p>
+                <p>Code: {{ t.code }}</p>
+                <img src="{{ t.files }}" class="mb-1">
+                <p>Responses: {{ t.responses }}</p>
             </div>
         </div>
-        {% else %}
+        {% empty %}
         <div class="list-group-item">Não existem tickets no momento.</div>
-        {% endif %}
-        </div>
+        {% endfor %}
         </div>
 
     <nav aria-label="Page navigation">
