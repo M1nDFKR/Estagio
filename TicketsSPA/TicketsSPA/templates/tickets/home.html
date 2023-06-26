@@ -33,11 +33,7 @@ Home
     <div class="container-fluid">
         <div class="d-flex align-items-center">
             <a class="navbar-brand" href="#">
-<<<<<<< HEAD
-                <img src="{% static 'login/Logo.png' %}" class="navbar-logo">
-=======
                 <img src="{% static 'login/logo.png' %}" class="navbar-logo">
->>>>>>> 2697e9fa55e52cc7b435ecee7f0c13998b780213
                 <span class="ms-2">Kit Escola Digital</span>
             </a>
         </div>
@@ -57,31 +53,6 @@ Home
 
 <div class="container py-5">
     <h1 class="mb-5">Tickets Kit Escola Digital</h1>
-<<<<<<< HEAD
-    
-    <form id="ticket-filter-form" method="get">
-        {{ form.as_p }}
-        
-        <input type="submit" value="Filter">
-    </form>
-
-    <div id="ticket-list" class="list-group">
-        {% for t in tickets %}
-        <div class="list-group-item">
-            <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#ticket{{ t.id }}"
-                aria-expanded="false" aria-controls="ticket{{ t.id }}" onclick="toggleCollapse(this)">
-                {% with cleaned_title=t.title|slice:"15:" %}
-                <h4 class="mb-1">{{ cleaned_title }}</h4>
-                {% endwith %}
-            </button>
-            <div id="ticket{{ t.id }}" class="collapse">
-                <p>Assunto: {{ t.title}}</p>
-                <p>Code: {{ t.code }}</p>
-                <p>Status: {{ t.status }}</p>
-                <p>Corpo: {{ t.subject_from_email }}</p>
-                <img src="{{ t.files }}" class="mb-1">
-                <p>Responses: {{ t.responses }}</p>
-=======
     <div id="thread-list" class="list-group">
         {% for t in threads %}
         <div class="list-group-item">
@@ -110,27 +81,11 @@ Home
                         </div>
                     </div>
                     {% endfor %}
-                </ul>
+                    </div>
             </div>
         </div>
         {% empty %}
         <div class="list-group-item">Não existem tickets no momento.</div>
-        {% endfor %}
-    </div>
-
-    <h1 class="mt-5">Ticket Threads</h1>
-    <div id="thread-list" class="list-group">
-        {% for ticket_thread in ticket_threads %}
-        <div class="list-group-item">
-            <h4 class="mb-1">{{ ticket_thread.title }}</h4>
-            <ul>
-                {% for ticket in ticket_thread.tickets.all %}
-                <li>{{ ticket.title }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% empty %}
-        <div class="list-group-item">Não existem threads no momento.</div>
         {% endfor %}
     </div>
 
@@ -187,8 +142,6 @@ Home
             button.setAttribute("aria-expanded", "true");
         }
     }
-
-    
 
     $(document).on('click', '.pagination-link', function (e) {
         e.preventDefault();

@@ -8,8 +8,6 @@ from .models import Ticket, TicketThread
 from .gmail_mirror import get_emails
 from .gmail_mirror import create_ticket_instances
 from django.core.paginator import Paginator
-from django.shortcuts import render
-from .forms import TicketFilterForm
 
 
 class LoginView(TemplateView):
@@ -42,27 +40,9 @@ class HomeView(TemplateView):
         threads = TicketThread.objects.all()
         paginator = Paginator(threads, self.paginate_by)
 
-        emails = get_emails()
-        create_ticket_instances(emails)
-        tickets = Ticket.objects.all()
-
-        form = TicketFilterForm(self.request.GET)
-
-        if form.is_valid():
-
-            if form.cleaned_data['title']:
-                tickets = tickets.filter(
-                    title__icontains=form.cleaned_data['title'])
-            if form.cleaned_data['status'] and form.cleaned_data['status'] != "":
-                tickets = tickets.filter(status=form.cleaned_data['status'])
-
-        paginator = Paginator(tickets, self.paginate_by)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
-        context['form'] = form
-        context['tickets'] = page_obj
-        context['emails'] = Email.objects.all()
         context['threads'] = page_obj
 
         return context
