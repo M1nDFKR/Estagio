@@ -9,6 +9,12 @@ class TicketThread(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     thread_code = models.CharField(max_length=14, null=True)
+    STATUS_CHOICES = (
+        ('A', 'Aberto'),
+        ('F', 'Fechado'),
+    )
+    status = models.CharField(
+        max_length=1, choices=STATUS_CHOICES, default='A')
 
     def __str__(self):
         return f"Thread ID: {self.id}"

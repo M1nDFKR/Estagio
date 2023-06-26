@@ -61,35 +61,31 @@ Home
                 <h4 class="mb-1">{{ t.thread_code }}</h4>
             </button>
             <div id="t{{ t.id }}" class="collapse">
-                <p>ID: {{ t.id }}</p>
                 <p>Code: {{ t.thread_code }}</p>
-                <p>Created: {{ t.created_at }}</p>
+                <p>Updated: {{ t.updated_at }}</p>
+                <p>Status: {{ t.status }}</p>
                 <p>Tickets:</p>
-                <ul>
+                <div id="ticket-list" class="list-group">
                     {% for ticket in t.tickets.all %}
-                    <li>{{ ticket.title }}</li>
+                    <div class="list-group-item">
+                        <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#ticket{{ ticket.id }}"
+                            aria-expanded="false" aria-controls="ticket{{ ticket.id }}" onclick="toggleCollapse(this)">
+                            {{ ticket.title }}
+                        </button>
+                        <div id="ticket{{ ticket.id }}" class="collapse">
+                            <!-- Subticket details here -->
+                            <p>Title: {{ ticket.title }}</p>
+                            <p>Status: {{ ticket.status }}</p>
+                            <p>Corpo: {{ ticket.subject_from_email }}</p>
+                            <!-- Add more details as needed -->
+                        </div>
+                    </div>
                     {% endfor %}
-                </ul>
+                    </div>
             </div>
         </div>
         {% empty %}
         <div class="list-group-item">Não existem tickets no momento.</div>
-        {% endfor %}
-    </div>
-
-    <h1 class="mt-5">Ticket Threads</h1>
-    <div id="thread-list" class="list-group">
-        {% for ticket_thread in ticket_threads %}
-        <div class="list-group-item">
-            <h4 class="mb-1">{{ ticket_thread.title }}</h4>
-            <ul>
-                {% for ticket in ticket_thread.tickets.all %}
-                <li>{{ ticket.title }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% empty %}
-        <div class="list-group-item">Não existem threads no momento.</div>
         {% endfor %}
     </div>
 
