@@ -42,10 +42,6 @@ class HomeView(TemplateView):
         threads = TicketThread.objects.all()
         paginator = Paginator(threads, self.paginate_by)
 
-        emails = get_emails()
-        create_ticket_instances(emails)
-        tickets = Ticket.objects.all()
-
         form = TicketFilterForm(self.request.GET)
 
         if form.is_valid():
@@ -62,7 +58,6 @@ class HomeView(TemplateView):
 
         context['form'] = form
         context['tickets'] = page_obj
-        context['emails'] = Email.objects.all()
         context['threads'] = page_obj
 
         return context
