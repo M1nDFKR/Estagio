@@ -56,8 +56,8 @@ Home
     <div id="thread-list" class="list-group">
         {% for t in threads %}
         <div class="list-group-item">
-            <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#t{{ t.id }}"
-                aria-expanded="false" aria-controls="t{{ t.id }}" onclick="toggleCollapse(this)">
+            <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#t{{ t.id }}" aria-expanded="false"
+                aria-controls="t{{ t.id }}" onclick="toggleCollapse(this)">
                 <h4 class="mb-1">{{ t.thread_code }}</h4>
             </button>
             <div id="t{{ t.id }}" class="collapse">
@@ -65,109 +65,110 @@ Home
                 <p>Updated: {{ t.updated_at }}</p>
                 <p>Status: {{ t.status }}</p>
                 <p>Tickets:</p>
-                <div id="thread-list" class="list-group">
+                <div id="ticket-list" class="list-group">
                     {% for ticket in t.tickets.all %}
                     <div class="list-group-item">
-                        <button class="btn btn-link" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#t{{ ticket.id }}" aria-expanded="false" aria-controls="t{{ ticket.id }}"
-                            onclick="toggleCollapse(this)">
+                        <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#ticket{{ ticket.id }}"
+                            aria-expanded="false" aria-controls="ticket{{ ticket.id }}" onclick="toggleCollapse(this)">
                             {{ ticket.title }}
                         </button>
-                        <div id="t{{ ticket.id }}" class="collapse">
+                        <div id="ticket{{ ticket.id }}" class="collapse">
+                            <!-- Subticket details here -->
                             <p>Title: {{ ticket.title }}</p>
                             <p>Status: {{ ticket.status }}</p>
-                            <p>Status: {{ ticket.subject_from_email }}</p>
+                            <p>Corpo: {{ ticket.subject_from_email }}</p>
+                            <!-- Add more details as needed -->
                         </div>
                     </div>
                     {% endfor %}
-                    </ul>
-                </div>
+                    </div>
             </div>
-            {% empty %}
-            <div class="list-group-item">Nao existem tickets no momento.</div>
-            {% endfor %}
         </div>
-
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
-                {% if tickets.has_previous %}
-                <li class="page-item">
-                    <a class="page-link pagination-link" href="?page={{ tickets.previous_page_number }}">Anterior</a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">Anterior</span>
-                </li>
-                {% endif %}
-                {% for num in tickets.paginator.page_range %}
-                {% if tickets.number == num %}
-                <li class="page-item active">
-                    <span class="page-link">{{ num }}</span>
-                </li>
-                {% else %}
-                <li class="page-item">
-                    <a class="page-link pagination-link" href="?page={{ num }}">{{ num }}</a>
-                </li>
-                {% endif %}
-                {% endfor %}
-                {% if tickets.has_next %}
-                <li class="page-item">
-                    <a class="page-link pagination-link" href="?page={{ tickets.next_page_number }}">Proxima</a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">Proxima</span>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
+        {% empty %}
+        <div class="list-group-item">Não existem tickets no momento.</div>
+        {% endfor %}
     </div>
 
-    <!-- JS, Popper.js e jQuery do Bootstrap 5 -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if tickets.has_previous %}
+            <li class="page-item">
+                <a class="page-link pagination-link" href="?page={{ tickets.previous_page_number }}">Anterior</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Anterior</span>
+            </li>
+            {% endif %}
+            {% for num in tickets.paginator.page_range %}
+            {% if tickets.number == num %}
+            <li class="page-item active">
+                <span class="page-link">{{ num }}</span>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link pagination-link" href="?page={{ num }}">{{ num }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% if tickets.has_next %}
+            <li class="page-item">
+                <a class="page-link pagination-link" href="?page={{ tickets.next_page_number }}">Próxima</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Próxima</span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
 
-    <script>
-        function toggleCollapse(button) {
-            var target = document.querySelector(button.getAttribute("data-bs-target"));
-            var isExpanded = target.classList.contains("show");
+<!-- JS, Popper.js e jQuery do Bootstrap 5 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
 
-            if (isExpanded) {
-                $(target).collapse('hide');
-                button.setAttribute("aria-expanded", "false");
-            } else {
-                $(target).collapse('show');
-                button.setAttribute("aria-expanded", "true");
+<script>
+    function toggleCollapse(button) {
+        var target = document.querySelector(button.getAttribute("data-bs-target"));
+        var isExpanded = target.classList.contains("show");
+
+        if (isExpanded) {
+            $(target).collapse('hide');
+            button.setAttribute("aria-expanded", "false");
+        } else {
+            $(target).collapse('show');
+            button.setAttribute("aria-expanded", "true");
+        }
+    }
+
+    $(document).on('click', '.pagination-link', function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        loadTickets(url);
+        // Update URL without page reload
+        window.history.pushState(null, '', url);
+    });
+
+    function loadTickets(url) {
+        $.ajax({
+            url: url,
+            method: 'GET',
+            success: function (data) {
+                var $data = $(data);  // Convert the returned HTML string to a jQuery object
+                var ticketList = $data.find('#ticket-list').html();  // Extract the ticket list HTML
+                var threadList = $data.find('#thread-list').html();  // Extract the thread list HTML
+                var pagination = $data.find('.pagination').html();  // Extract the pagination HTML
+
+                $('#ticket-list').html(ticketList);  // Update the ticket list content
+                $('#thread-list').html(threadList);  // Update the thread list content
+                $('.pagination').html(pagination);  // Update the pagination links
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.log(errorThrown);
             }
-        }
-
-        $(document).on('click', '.pagination-link', function (e) {
-            e.preventDefault();
-            var url = $(this).attr('href');
-            loadTickets(url);
-            // Update URL without page reload
-            window.history.pushState(null, '', url);
         });
-
-        function loadTickets(url) {
-            $.ajax({
-                url: url,
-                method: 'GET',
-                success: function (data) {
-                    var $data = $(data);  // Convert the returned HTML string to a jQuery object
-                    var ticketList = $data.find('#ticket-list').html();  // Extract the ticket list HTML
-                    var threadList = $data.find('#thread-list').html();  // Extract the thread list HTML
-                    var pagination = $data.find('.pagination').html();  // Extract the pagination HTML
-
-                    $('#ticket-list').html(ticketList);  // Update the ticket list content
-                    $('#thread-list').html(threadList);  // Update the thread list content
-                    $('.pagination').html(pagination);  // Update the pagination links
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    console.log(errorThrown);
-                }
-            });
-        }
-    </script>
-    {% endblock %}
+    }
+</script>
+{% endblock %}
