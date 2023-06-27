@@ -150,6 +150,7 @@ Home
                         <h5>{{ comment.user.username }}</h5>
                         <p>{{ comment.text }}</p>
                         <p><small>Posted on {{ comment.created_at }}</small></p>
+                        <button class="btn btn-sm btn-danger delete-comment" data-comment-id="{{ comment.id }}">Delete</button>
                     </div>
                     {% empty %}
                     <div class="list-group-item">No comments yet.</div>
@@ -299,6 +300,7 @@ $('.comment-form').submit(function(e) {
                 '<h5>' + data.comment.user.username + '</h5>' +
                 '<p>' + data.comment.text + '</p>' +
                 '<p><small>Posted on ' + data.comment.created_at + '</small></p>' +
+                '<button class="btn btn-sm btn-danger delete-comment" data-comment-id="{{ comment.id }}">Delete</button>' +
                 '</div>';
 
             // Append new comment to the correct form's comment list
@@ -312,6 +314,28 @@ $('.comment-form').submit(function(e) {
     });
 });
 
+$('.comment-list').on('click', '.delete-comment', function() {
+    var commentId = $(this).data('comment-id');
+    var commentElement = $(this).closest('.list-group-item');
+
+    $.ajax({
+        type: 'POST',
+        url: '/delete_comment/' + commentId + '/',
+        data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        success: function(response) {
+            if (response.status === 'ok') {
+                commentElement.remove();
+            } else {
+                alert('Failed to delete comment. Please try again.');
+            }
+        },
+        error: function() {
+            alert('An error occurred while deleting the comment. Please try again.');
+        }
+    });
+});
 
 </script>
 {% endblock %}

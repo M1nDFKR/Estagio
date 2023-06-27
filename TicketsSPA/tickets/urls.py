@@ -9,4 +9,6 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('home/', views.HomeView.as_view(template_name='home.html'), name='home'),
     path('add_comment/<int:ticket_id>/', views.add_comment, name='add_comment'),  
+    path('delete_comment/<int:comment_id>/', views.delete_comment, name='delete_comment'),
+
 ]

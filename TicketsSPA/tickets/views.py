@@ -10,7 +10,7 @@ from .gmail_mirror import create_ticket_instances
 from django.core.paginator import Paginator
 from django.db.models import F
 from django.shortcuts import get_object_or_404, redirect
-from .models import Ticket
+from .models import Ticket,Comment
 from .forms import CommentForm
 from django.forms.models import model_to_dict
 
@@ -91,3 +91,11 @@ def add_comment(request, ticket_id):
         else:
             data['status'] = 'error'
     return JsonResponse(data) 
+
+
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if request.method == 'POST':
+        comment.delete()
+        return JsonResponse({'status': 'ok'})
+    return JsonResponse({'status': 'error'})
