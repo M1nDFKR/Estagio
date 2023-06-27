@@ -31,13 +31,22 @@ Home
         text-overflow: ellipsis;
         display: block;
     }
-    
+
     .dropdown-toggle::after {
         transition: transform 0.3s;
     }
-    
+
     .dropdown-toggle[aria-expanded="true"]::after {
         transform: rotate(180deg);
+    }
+
+    /* Add new styles for the filter and search bar */
+    .filter-container {
+        margin-bottom: 10px;
+    }
+
+    .search-container {
+        margin-bottom: 10px;
     }
 </style>
 {% endblock %}
@@ -72,8 +81,8 @@ Home
         <div class="col-md-6"></div>
         <div class="col-md-6 text-end">
             <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="order-dropdown" data-bs-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="order-dropdown"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Order by
                 </button>
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="order-dropdown">
@@ -84,16 +93,38 @@ Home
         </div>
     </div>
 
+    <!-- Add the filter and search elements -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 filter-container">
+                <label for="status-filter" class="form-label">Filter by Status:</label>
+                <select id="status-filter" class="form-select">
+                    <option value="">All</option>
+                    <option value="A">A</option>
+                    <option value="F">F</option>
+                </select>
+            </div>
+            <div class="col-md-6 search-container">
+                <label for="search-input" class="form-label">Search by Code or Assunto:</label>
+                <div class="input-group">
+                    <input type="text" id="search-input" class="form-control" placeholder="Enter code or Assunto">
+                    <button id="clear-button" class="btn btn-secondary">Clear Filters</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div id="thread-list" class="list-group">
         {% for t in threads %}
-        <div class="list-group-item">
+        <div class="list-group-item" data-status="{{ t.status }}">
             <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#t{{ t.id }}"
                 aria-expanded="false" aria-controls="t{{ t.id }}" onclick="toggleCollapse(this)">
                 <h4 class="mb-1 truncate-text">{{ t.thread_code }} - {{ t.tickets.first.title }}</h4>
             </button>
             <div id="t{{ t.id }}" class="collapse">
                 <p>Code: {{ t.thread_code }}</p>
-                <p>Updated: {{ t.updated_at }}</p>
+                <p>Created: {{ t.created_at }}</p>
                 <p>Status: {{ t.status }}</p>
                 <p>Tickets:</p>
                 <div id="ticket-list" class="list-group">
@@ -160,6 +191,9 @@ Home
     </nav>
 </div>
 
+<!-- Clear Button -->
+<button id="clear-button" class="btn btn-secondary">Clear Filters</button>
+
 <!-- JS, Popper.js e jQuery do Bootstrap 5 -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -176,6 +210,45 @@ Home
             var separator = currentUrl.indexOf('?') !== -1 ? '&' : '?';
             var newUrl = currentUrl.replace(/(\?|&)order_by=\w+/gi, '') + separator + 'order_by=' + orderOption;
             window.location.href = newUrl;
+        });
+
+        // Filter by status
+        $('#status-filter').change(function () {
+            var selectedStatus = $(this).val();
+
+            // Show/hide threads based on selected status
+            if (selectedStatus) {
+                $('#thread-list .list-group-item').hide();
+                $('#thread-list .list-group-item[data-status="' + selectedStatus + '"]').show();
+            } else {
+                $('#thread-list .list-group-item').show();
+            }
+        });
+
+        // Search functionality
+        $('#search-input').on('input', function () {
+            var searchText = $(this).val().trim().toLowerCase();
+
+            // Show/hide threads based on search input
+            if (searchText) {
+                $('#thread-list .list-group-item').each(function () {
+                    var threadText = $(this).text().toLowerCase();
+                    if (threadText.indexOf(searchText) !== -1) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            } else {
+                $('#thread-list .list-group-item').show();
+            }
+        });
+
+        // Clear filters and search
+        $('#clear-button').click(function () {
+            $('#status-filter').val('');
+            $('#search-input').val('');
+            $('#thread-list .list-group-item').show();
         });
     });
 
