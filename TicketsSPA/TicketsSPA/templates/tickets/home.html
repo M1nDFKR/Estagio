@@ -24,6 +24,21 @@ Home
     .pagination {
         justify-content: center;
     }
+
+    .truncate-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+    }
+    
+    .dropdown-toggle::after {
+        transition: transform 0.3s;
+    }
+    
+    .dropdown-toggle[aria-expanded="true"]::after {
+        transform: rotate(180deg);
+    }
 </style>
 {% endblock %}
 
@@ -53,12 +68,28 @@ Home
 
 <div class="container py-5">
     <h1 class="mb-5">Tickets Kit Escola Digital</h1>
+    <div class="row mb-3">
+        <div class="col-md-6"></div>
+        <div class="col-md-6 text-end">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="order-dropdown" data-bs-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Order by
+                </button>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="order-dropdown">
+                    <a class="dropdown-item" href="#" data-order="recent">Most Recent</a>
+                    <a class="dropdown-item" href="#" data-order="oldest">Oldest</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="thread-list" class="list-group">
         {% for t in threads %}
         <div class="list-group-item">
-            <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#t{{ t.id }}" aria-expanded="false"
-                aria-controls="t{{ t.id }}" onclick="toggleCollapse(this)">
-                <h4 class="mb-1">{{ t.thread_code }}</h4>
+            <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#t{{ t.id }}"
+                aria-expanded="false" aria-controls="t{{ t.id }}" onclick="toggleCollapse(this)">
+                <h4 class="mb-1 truncate-text">{{ t.thread_code }} - {{ t.tickets.first.title }}</h4>
             </button>
             <div id="t{{ t.id }}" class="collapse">
                 <p>Code: {{ t.thread_code }}</p>
@@ -68,8 +99,9 @@ Home
                 <div id="ticket-list" class="list-group">
                     {% for ticket in t.tickets.all %}
                     <div class="list-group-item">
-                        <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#ticket{{ ticket.id }}"
-                            aria-expanded="false" aria-controls="ticket{{ ticket.id }}" onclick="toggleCollapse(this)">
+                        <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#ticket{{ ticket.id }}" aria-expanded="false"
+                            aria-controls="ticket{{ ticket.id }}" onclick="toggleCollapse(this)">
                             {{ ticket.title }}
                         </button>
                         <div id="ticket{{ ticket.id }}" class="collapse">
@@ -81,7 +113,7 @@ Home
                         </div>
                     </div>
                     {% endfor %}
-                    </div>
+                </div>
             </div>
         </div>
         {% empty %}
@@ -91,29 +123,33 @@ Home
 
     <nav aria-label="Page navigation">
         <ul class="pagination">
-            {% if tickets.has_previous %}
+            {% if threads.has_previous %}
             <li class="page-item">
-                <a class="page-link pagination-link" href="?page={{ tickets.previous_page_number }}">Anterior</a>
+                <a class="page-link pagination-link"
+                    href="?page={{ threads.previous_page_number }}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">Anterior</a>
             </li>
             {% else %}
             <li class="page-item disabled">
                 <span class="page-link">Anterior</span>
             </li>
             {% endif %}
-            {% for num in tickets.paginator.page_range %}
-            {% if tickets.number == num %}
+            {% for num in threads.paginator.page_range %}
+            {% if threads.number == num %}
             <li class="page-item active">
                 <span class="page-link">{{ num }}</span>
             </li>
             {% else %}
             <li class="page-item">
-                <a class="page-link pagination-link" href="?page={{ num }}">{{ num }}</a>
+                <a class="page-link pagination-link"
+                    href="?page={{ num }}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">{{
+                    num }}</a>
             </li>
             {% endif %}
             {% endfor %}
-            {% if tickets.has_next %}
+            {% if threads.has_next %}
             <li class="page-item">
-                <a class="page-link pagination-link" href="?page={{ tickets.next_page_number }}">Próxima</a>
+                <a class="page-link pagination-link"
+                    href="?page={{ threads.next_page_number }}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">Próxima</a>
             </li>
             {% else %}
             <li class="page-item disabled">
@@ -128,8 +164,21 @@ Home
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.min.js"
+    crossorigin="anonymous"></script>
 
 <script>
+    $(document).ready(function () {
+        $('.dropdown-item').click(function (e) {
+            e.preventDefault();
+            var orderOption = $(this).data('order');
+            var currentUrl = window.location.href;
+            var separator = currentUrl.indexOf('?') !== -1 ? '&' : '?';
+            var newUrl = currentUrl.replace(/(\?|&)order_by=\w+/gi, '') + separator + 'order_by=' + orderOption;
+            window.location.href = newUrl;
+        });
+    });
+
     function toggleCollapse(button) {
         var target = document.querySelector(button.getAttribute("data-bs-target"));
         var isExpanded = target.classList.contains("show");
@@ -141,34 +190,6 @@ Home
             $(target).collapse('show');
             button.setAttribute("aria-expanded", "true");
         }
-    }
-
-    $(document).on('click', '.pagination-link', function (e) {
-        e.preventDefault();
-        var url = $(this).attr('href');
-        loadTickets(url);
-        // Update URL without page reload
-        window.history.pushState(null, '', url);
-    });
-
-    function loadTickets(url) {
-        $.ajax({
-            url: url,
-            method: 'GET',
-            success: function (data) {
-                var $data = $(data);  // Convert the returned HTML string to a jQuery object
-                var ticketList = $data.find('#ticket-list').html();  // Extract the ticket list HTML
-                var threadList = $data.find('#thread-list').html();  // Extract the thread list HTML
-                var pagination = $data.find('.pagination').html();  // Extract the pagination HTML
-
-                $('#ticket-list').html(ticketList);  // Update the ticket list content
-                $('#thread-list').html(threadList);  // Update the thread list content
-                $('.pagination').html(pagination);  // Update the pagination links
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                console.log(errorThrown);
-            }
-        });
     }
 </script>
 {% endblock %}

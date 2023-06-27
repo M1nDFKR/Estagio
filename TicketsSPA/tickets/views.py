@@ -8,6 +8,7 @@ from .models import Ticket, TicketThread
 from .gmail_mirror import get_emails
 from .gmail_mirror import create_ticket_instances
 from django.core.paginator import Paginator
+from django.db.models import F
 
 
 class LoginView(TemplateView):
@@ -36,8 +37,13 @@ class HomeView(TemplateView):
         context = super().get_context_data(**kwargs)
         emails = get_emails()
         create_ticket_instances(emails)
-        tickets = Ticket.objects.all()
-        threads = TicketThread.objects.all()
+        order_by = self.request.GET.get('order_by')
+        if order_by == 'recent':
+            threads = TicketThread.objects.order_by(F('updated_at').desc())
+        elif order_by == 'oldest':
+            threads = TicketThread.objects.order_by('created_at')
+        else:
+            threads = TicketThread.objects.order_by('-created_at')
         paginator = Paginator(threads, self.paginate_by)
 
         page_number = self.request.GET.get('page')
