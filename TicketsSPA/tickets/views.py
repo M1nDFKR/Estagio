@@ -37,7 +37,7 @@ class HomeView(TemplateView):
         emails = get_emails()
         create_ticket_instances(emails)
         tickets = Ticket.objects.all()
-        threads = TicketThread.objects.all()
+        threads = TicketThread.objects.all().order_by('-created_at')
         paginator = Paginator(threads, self.paginate_by)
 
         page_number = self.request.GET.get('page')

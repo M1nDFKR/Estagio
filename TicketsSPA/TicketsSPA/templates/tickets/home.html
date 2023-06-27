@@ -58,7 +58,7 @@ Home
         <div class="list-group-item">
             <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#t{{ t.id }}" aria-expanded="false"
                 aria-controls="t{{ t.id }}" onclick="toggleCollapse(this)">
-                <h4 class="mb-1">{{ t.thread_code }}</h4>
+                <h4 class="mb-1">{{ t.tickets.first.title }}</h4>
             </button>
             <div id="t{{ t.id }}" class="collapse">
                 <p>Code: {{ t.thread_code }}</p>
