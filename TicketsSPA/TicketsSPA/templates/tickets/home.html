@@ -43,10 +43,29 @@ Home
     /* Add new styles for the filter and search bar */
     .filter-container {
         margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filter-label {
+        margin-bottom: 5px;
     }
 
     .search-container {
         margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .order-container {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+    }
+
+    .order-label {
+        margin-right: 10px;
     }
 </style>
 {% endblock %}
@@ -78,42 +97,42 @@ Home
 <div class="container py-5">
     <h1 class="mb-5">Tickets Kit Escola Digital</h1>
     <div class="row mb-3">
-        <div class="col-md-6"></div>
-        <div class="col-md-6 text-end">
-            <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="order-dropdown"
-                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Order by
-                </button>
-                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="order-dropdown">
-                    <a class="dropdown-item" href="#" data-order="recent">Most Recent</a>
-                    <a class="dropdown-item" href="#" data-order="oldest">Oldest</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add the filter and search elements -->
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 filter-container">
-                <label for="status-filter" class="form-label">Filter by Status:</label>
-                <select id="status-filter" class="form-select">
-                    <option value="">All</option>
-                    <option value="A">A</option>
-                    <option value="F">F</option>
+        <div class="col-md-4 filter-container">
+            <label for="status-filter" class="form-label filter-label">Filter by Status:</label>
+            <div class="search-container">
+                <select id="status-filter" class="form-select  btn btn-secondary">
+                    <option value="">Todos</option>
+                    <option value="A">Aberto</option>
+                    <option value="F">Fechado</option>
                 </select>
             </div>
-            <div class="col-md-6 search-container">
-                <label for="search-input" class="form-label">Search by Code or Assunto:</label>
+        </div>
+        <div class="col-md-4 order-container">
+            <div class="form-group">
+                <label for="search-input" class="form-label filter-label">Pesquisar:</label>
                 <div class="input-group">
                     <input type="text" id="search-input" class="form-control" placeholder="Enter code or Assunto">
-                    <button id="clear-button" class="btn btn-secondary">Clear Filters</button>
+                    <button id="clear-button" class="btn btn-secondary">Limpar filtros</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 order-container justify-content-end">
+            <div class="form-group">
+                <label for="order-dropdown" class="form-label order-label">Ordenar por:</label>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="order-dropdown"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Default
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="order-dropdown">
+                        <a class="dropdown-item" href="#" data-order="default">Normal</a>
+                        <a class="dropdown-item" href="#" data-order="recent">Mais recente</a>
+                        <a class="dropdown-item" href="#" data-order="oldest">Mais antigo</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 
     <div id="thread-list" class="list-group">
         {% for t in threads %}
@@ -191,9 +210,6 @@ Home
     </nav>
 </div>
 
-<!-- Clear Button -->
-<button id="clear-button" class="btn btn-secondary">Clear Filters</button>
-
 <!-- JS, Popper.js e jQuery do Bootstrap 5 -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -207,9 +223,9 @@ Home
             e.preventDefault();
             var orderOption = $(this).data('order');
             var currentUrl = window.location.href;
-            var separator = currentUrl.indexOf('?') !== -1 ? '&' : '?';
-            var newUrl = currentUrl.replace(/(\?|&)order_by=\w+/gi, '') + separator + 'order_by=' + orderOption;
-            window.location.href = newUrl;
+            var url = new URL(currentUrl);
+            url.searchParams.set('order_by', orderOption);
+            window.location.href = url.href;
         });
 
         // Filter by status
