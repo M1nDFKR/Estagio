@@ -83,11 +83,11 @@ Home
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="order-dropdown"
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Order by
+                    Ordenar por:
                 </button>
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="order-dropdown">
-                    <a class="dropdown-item" href="#" data-order="recent">Most Recent</a>
-                    <a class="dropdown-item" href="#" data-order="oldest">Oldest</a>
+                    <a class="dropdown-item" href="#" data-order="recent">Mais recente</a>
+                    <a class="dropdown-item" href="#" data-order="oldest">Mais antigo</a>
                 </div>
             </div>
         </div>
@@ -97,18 +97,18 @@ Home
     <div class="container">
         <div class="row">
             <div class="col-md-6 filter-container">
-                <label for="status-filter" class="form-label">Filter by Status:</label>
+                <label for="status-filter" class="form-label">Filtrar por Status:</label>
                 <select id="status-filter" class="form-select">
-                    <option value="">All</option>
-                    <option value="A">A</option>
-                    <option value="F">F</option>
+                    <option value="">Todos</option>
+                    <option value="A">Aberto</option>
+                    <option value="F">Fechado</option>
                 </select>
             </div>
             <div class="col-md-6 search-container">
-                <label for="search-input" class="form-label">Search by Code or Assunto:</label>
+                <label for="search-input" class="form-label">Procurar por Code or Assunto:</label>
                 <div class="input-group">
                     <input type="text" id="search-input" class="form-control" placeholder="Enter code or Assunto">
-                    <button id="clear-button" class="btn btn-secondary">Clear Filters</button>
+                    <button id="clear-button" class="btn btn-secondary">Limpar Filtros</button>
                 </div>
             </div>
         </div>
