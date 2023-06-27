@@ -1,5 +1,5 @@
 from django import forms
-from .models import Ticket
+from .models import Ticket, Comment
 from django.contrib.auth.forms import UserCreationForm
 
 
@@ -20,3 +20,8 @@ class TicketFilterForm(forms.ModelForm):
         super(TicketFilterForm, self).__init__(*args, **kwargs)
         self.fields['title'].required = False
         self.fields['status'].required = False
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
