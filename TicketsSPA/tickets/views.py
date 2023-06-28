@@ -8,6 +8,12 @@ from .models import Ticket, TicketThread
 from .gmail_mirror import get_emails
 from .gmail_mirror import create_ticket_instances
 from django.core.paginator import Paginator
+from django.db.models import F
+from django.shortcuts import get_object_or_404, redirect
+from .models import Ticket,Comment
+from .forms import CommentForm
+from django.forms.models import model_to_dict
+
 
 
 class LoginView(TemplateView):
@@ -37,13 +43,15 @@ class HomeView(TemplateView):
         emails = get_emails()
         create_ticket_instances(emails)
         tickets = Ticket.objects.all()
-        threads = TicketThread.objects.all().order_by('-created_at')
+        threads = TicketThread.objects.all()
         paginator = Paginator(threads, self.paginate_by)
 
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
         context['threads'] = page_obj
+        context['comment_form'] = CommentForm()
+        context['user'] = self.request.user 
 
         return context
 
@@ -52,3 +60,37 @@ class HomeView(TemplateView):
 def logout_view(request):
     logout(request)
     return redirect('login.html')
+
+from django.http import JsonResponse
+
+@login_required
+def add_comment(request, ticket_id):
+    data = dict()
+    ticket = get_object_or_404(Ticket, id=ticket_id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        print(form.is_valid())  # Check if form is valid
+        print(form.errors)  # Print form errors
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.ticket = ticket
+            comment.user = request.user
+            comment.save()
+            print(comment)
+            data['comment'] = model_to_dict(comment) # convert the comment to a dictionary
+            data['status'] = 'ok'
+            data['comment']['user'] = {
+                'username': comment.user.username,
+            }
+            data['comment']['created_at'] = comment.created_at.strftime('%Y-%m-%d %H:%M:%S')
+        else:
+            data['status'] = 'error'
+    return JsonResponse(data) 
+
+
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if request.method == 'POST':
+        comment.delete()
+        return JsonResponse({'status': 'ok'})
+    return JsonResponse({'status': 'error'})
