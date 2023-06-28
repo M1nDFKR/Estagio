@@ -20,13 +20,28 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <script>
-        window.addEventListener('beforeunload', function () {
-            $.ajax({
-                type: 'GET',
-                url: '/logout_on_close/',
-                async: false,
-            });
-        });
+window.addEventListener('beforeunload', function(event) {
+    // Make the AJAX request
+    $.ajax({
+        type: 'GET',
+        url: '/logout_on_close/',
+        async: true,
+        success: function(response) {
+            // Handle the response if needed
+        },
+        error: function() {
+            // Handle errors if needed
+        }
+    });
+
+    // Add a delay before unloading in Chrome
+    if (typeof event.preventDefault === 'function') {
+        event.preventDefault();
+        event.returnValue = '';
+    }
+});
+
+
     </script>
     {% endblock %}
 </body>
