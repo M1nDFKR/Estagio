@@ -13,7 +13,7 @@ from django.shortcuts import get_object_or_404, redirect
 from .models import Ticket,Comment
 from .forms import CommentForm
 from django.forms.models import model_to_dict
-
+from django.http import JsonResponse
 
 
 class LoginView(TemplateView):
@@ -66,7 +66,10 @@ def logout_view(request):
     logout(request)
     return redirect('login.html')
 
-from django.http import JsonResponse
+
+def logout_on_close(request):
+    logout(request)
+    return JsonResponse({'status': 'ok'})
 
 @login_required
 def add_comment(request, ticket_id):
