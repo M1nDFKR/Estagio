@@ -42,13 +42,8 @@ class HomeView(TemplateView):
         context = super().get_context_data(**kwargs)
         emails = get_emails()
         create_ticket_instances(emails)
-        order_by = self.request.GET.get('order_by')
-        if order_by == 'recent':
-            threads = TicketThread.objects.order_by(F('updated_at').desc())
-        elif order_by == 'oldest':
-            threads = TicketThread.objects.order_by('created_at')
-        else:
-            threads = TicketThread.objects.order_by('-created_at')
+        tickets = Ticket.objects.all()
+        threads = TicketThread.objects.all()
         paginator = Paginator(threads, self.paginate_by)
 
         page_number = self.request.GET.get('page')
