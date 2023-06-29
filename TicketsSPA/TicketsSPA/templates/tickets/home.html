@@ -69,11 +69,11 @@ Home
     }
 
     .closed-ticket {
-        color: grey;
+        color: rgba(214, 3, 3, 0.774);
     }
 
     .closed-ticketthread {
-        color: rgb(201, 23, 23);
+        color: grey;
     }
 
     #status-filter option {
@@ -85,6 +85,10 @@ Home
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    .btn.btn-link {
+        text-decoration: none;
     }
 </style>
 {% endblock %}
@@ -109,11 +113,6 @@ Home
                     <a class="nav-link" href="{% url 'login' %}">Logout</a>
                 </li>
             </ul>
-            <div class="d-flex">
-                <input class="form-control me-2" type="search" id="search-input" placeholder="Enter code or Assunto"
-                    aria-label="Search">
-                <button class="btn btn-outline-success" id="clear-button" type="submit">Limpar filtros</button>
-            </div>
         </div>
     </div>
 </nav>
@@ -121,12 +120,12 @@ Home
     <h1 class="mb-5">Tickets Kit Escola Digital</h1>
     <div class="row mb-3">
         <div class="col-md-4 filter-container">
-            <label for="status-filter" class="form-label filter-label">Filter by Status:</label>
+            <label for="status-filter" class="form-label filter-label">Filtrar por Status:</label>
 
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="status-filter"
                     data-bs-toggle="dropdown" aria-expanded="false">
-                    Select Status
+                    Selecionar Status
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="status-filter">
                     <li><a class="dropdown-item" href="#">Todos</a></li>
@@ -140,9 +139,9 @@ Home
         </div>
         <div class="col-md-4 order-container">
             <div class="form-group">
-                <label for="search-input" class="form-label filter-label">Pesquisar:</label>
+                <label for="search-input" class="form-label filter-label"></label>
                 <div class="input-group">
-                    <input type="text" id="search-input" class="form-control" placeholder="Enter code or Assunto">
+                    <input type="text" id="search-input" class="form-control" placeholder="Pesquisar">
                     <button id="clear-button" class="btn btn-primary">Limpar filtros</button>
                 </div>
             </div>
@@ -184,13 +183,13 @@ Home
                 <div id="ticket-list" class="list-group">
                     {% for ticket in t.tickets.all %}
                     <div class="list-group-item">
-                        <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                        <button class="btn btn-link no-underline" type="button" data-bs-toggle="collapse"
                             data-bs-target="#ticket{{ ticket.id }}" aria-expanded="false"
                             aria-controls="ticket{{ ticket.id }}" onclick="toggleCollapse(this)">
                             <!-- Check if the ticket is closed and apply the class -->
                             <div style="max-width: 1000px;">
-                            <h5 class="mb-1 truncate-text {% if ticket.status == 'F' %}closed-ticket{% endif %}">
-                                {{ ticket.title }}</h5>
+                                <h5 class="mb-1 truncate-text {% if ticket.status == 'F' %}closed-ticket{% endif %}">
+                                    {{ ticket.title }}</h5>
                             </div>
                         </button>
                         <div id="ticket{{ ticket.id }}" class="collapse">
@@ -211,13 +210,18 @@ Home
                                         data-comment-id="{{ comment.id }}">Delete</button>
                                 </div>
                                 {% empty %}
-                                <div class="list-group-item">No comments yet.</div>
                                 {% endfor %}
                                 <div class="list-group-item">
                                     <form class="comment-form" method="post" action="{% url 'add_comment' ticket.id %}">
                                         {% csrf_token %}
-                                        {{ comment_form }}
-                                        <input type="submit" value="Add comment">
+                                        <div class="form-group">
+                                            <label for="{{ comment_form.text.id_for_label }}">Escreva aqui o seu
+                                                comentário:</label>
+                                            <textarea class="form-control" id="{{ comment_form.text.id_for_label }}"
+                                                rows="3"
+                                                name="{{ comment_form.text.name }}">{{ comment_form.text.value|default:'' }}</textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Adicionar comentário</button>
                                     </form>
                                 </div>
                             </div>
