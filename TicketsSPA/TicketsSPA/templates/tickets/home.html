@@ -71,6 +71,21 @@ Home
     .closed-ticket {
         color: grey;
     }
+
+    .closed-ticketthread {
+        color: rgb(201, 23, 23);
+    }
+
+    #status-filter option {
+        background: white;
+        color: black;
+    }
+
+    .truncate-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 </style>
 {% endblock %}
 
@@ -107,20 +122,28 @@ Home
     <div class="row mb-3">
         <div class="col-md-4 filter-container">
             <label for="status-filter" class="form-label filter-label">Filter by Status:</label>
-            <div class="search-container">
-                <select id="status-filter" class="form-select  btn btn-secondary">
-                    <option value="">Todos</option>
-                    <option value="A">Aberto</option>
-                    <option value="F">Fechado</option>
-                </select>
+
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="status-filter"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Select Status
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="status-filter">
+                    <li><a class="dropdown-item" href="#">Todos</a></li>
+                    <li><a class="dropdown-item" href="#">Aberto</a></li>
+                    <li><a class="dropdown-item" href="#">Fechado</a></li>
+                </ul>
             </div>
+
+
+
         </div>
         <div class="col-md-4 order-container">
             <div class="form-group">
                 <label for="search-input" class="form-label filter-label">Pesquisar:</label>
                 <div class="input-group">
                     <input type="text" id="search-input" class="form-control" placeholder="Enter code or Assunto">
-                    <button id="clear-button" class="btn btn-secondary">Limpar filtros</button>
+                    <button id="clear-button" class="btn btn-primary">Limpar filtros</button>
                 </div>
             </div>
         </div>
@@ -128,7 +151,7 @@ Home
             <div class="form-group">
                 <label for="order-dropdown" class="form-label order-label">Ordenar por:</label>
                 <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="order-dropdown"
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="order-dropdown"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Default
                     </button>
@@ -147,7 +170,11 @@ Home
         <div class="list-group-item" data-status="{{ t.status }}">
             <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#t{{ t.id }}"
                 aria-expanded="false" aria-controls="t{{ t.id }}" onclick="toggleCollapse(this)">
-                <h4 class="mb-1 truncate-text {% if t.status == 'F' %}closed-ticket{% endif %}">{{ t.thread_code }} - {{ t.tickets.first.title }}</h4>
+                <div style="max-width: 1000px;">
+                    <h5 class="mb-1 truncate-text {% if t.status == 'F' %}closed-ticketthread{% endif %}">
+                        {{ t.tickets.first.title }}</h5>
+                </div>
+
             </button>
             <div id="t{{ t.id }}" class="collapse">
                 <p>Code: {{ t.thread_code }}</p>
@@ -156,42 +183,47 @@ Home
                 <p>Tickets:</p>
                 <div id="ticket-list" class="list-group">
                     {% for ticket in t.tickets.all %}
-            <div class="list-group-item">
-                <button class="btn btn-link" type="button" data-bs-toggle="collapse"
-                data-bs-target="#ticket{{ ticket.id }}" aria-expanded="false"
-                aria-controls="ticket{{ ticket.id }}" onclick="toggleCollapse(this)">
-                {{ ticket.title }}
-                </button>
-                <div id="ticket{{ ticket.id }}" class="collapse">
-                <!-- Subticket details here -->
-                <p>Title: {{ ticket.title }}</p>
-                <p>Status: {{ ticket.status }}</p>
-                <p>Corpo: {{ ticket.subject_from_email }}</p>
-                <!-- Add more details as needed -->
-                <!-- Comments -->
-                <p>Comments:</p>
-                <div class="list-group comment-list">
-                    {% for comment in ticket.comments.all %}
                     <div class="list-group-item">
-                        <h5>{{ comment.user.username }}</h5>
-                        <p>{{ comment.text }}</p>
-                        <p><small>Posted on {{ comment.created_at }}</small></p>
-                        <button class="btn btn-sm btn-danger delete-comment" data-comment-id="{{ comment.id }}">Delete</button>
+                        <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#ticket{{ ticket.id }}" aria-expanded="false"
+                            aria-controls="ticket{{ ticket.id }}" onclick="toggleCollapse(this)">
+                            <!-- Check if the ticket is closed and apply the class -->
+                            <div style="max-width: 1000px;">
+                            <h5 class="mb-1 truncate-text {% if ticket.status == 'F' %}closed-ticket{% endif %}">
+                                {{ ticket.title }}</h5>
+                            </div>
+                        </button>
+                        <div id="ticket{{ ticket.id }}" class="collapse">
+                            <!-- Subticket details here -->
+                            <p>Title: {{ ticket.title }}</p>
+                            <p>Status: {{ ticket.status }}</p>
+                            <p>Corpo: {{ ticket.subject_from_email }}</p>
+                            <!-- Add more details as needed -->
+                            <!-- Comments -->
+                            <p>Comments:</p>
+                            <div class="list-group comment-list">
+                                {% for comment in ticket.comments.all %}
+                                <div class="list-group-item">
+                                    <h5>{{ comment.user.username }}</h5>
+                                    <p>{{ comment.text }}</p>
+                                    <p><small>Posted on {{ comment.created_at }}</small></p>
+                                    <button class="btn btn-sm btn-danger delete-comment"
+                                        data-comment-id="{{ comment.id }}">Delete</button>
+                                </div>
+                                {% empty %}
+                                <div class="list-group-item">No comments yet.</div>
+                                {% endfor %}
+                                <div class="list-group-item">
+                                    <form class="comment-form" method="post" action="{% url 'add_comment' ticket.id %}">
+                                        {% csrf_token %}
+                                        {{ comment_form }}
+                                        <input type="submit" value="Add comment">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    {% empty %}
-                    <div class="list-group-item">No comments yet.</div>
                     {% endfor %}
-                    <div class="list-group-item">
-                        <form class="comment-form" method="post" action="{% url 'add_comment' ticket.id %}">
-                            {% csrf_token %}
-                            {{ comment_form }}
-                            <input type="submit" value="Add comment">
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
                 </div>
             </div>
         </div>
@@ -245,51 +277,70 @@ Home
     integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
     crossorigin="anonymous"></script>
 <script>
-    $(document).ready(function () {
-        $('.dropdown-item').click(function (e) {
-            e.preventDefault();
-            var orderOption = $(this).data('order');
-            var currentUrl = window.location.href;
-            var url = new URL(currentUrl);
-            url.searchParams.set('order_by', orderOption);
-            window.location.href = url.href;
-        });
+    $('.dropdown-item').click(function (e) {
+        e.preventDefault();
+        var selectedStatus = $(this).data('value');
 
-        // Filter by status
-        $('#status-filter').change(function () {
-            var selectedStatus = $(this).val();
-            // Show/hide threads based on selected status
-            if (selectedStatus) {
-                $('#thread-list .list-group-item').hide();
-                $('#thread-list .list-group-item[data-status="' + selectedStatus + '"]').show();
-            } else {
-                $('#thread-list .list-group-item').show();
-            }
-        });
-        // Search functionality
-        $('#search-input').on('input', function () {
-            var searchText = $(this).val().trim().toLowerCase();
-            // Show/hide threads based on search input
-            if (searchText) {
-                $('#thread-list .list-group-item').each(function () {
-                    var threadText = $(this).text().toLowerCase();
-                    if (threadText.indexOf(searchText) !== -1) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
-            } else {
-                $('#thread-list .list-group-item').show();
-            }
-        });
-        // Clear filters and search
-        $('#clear-button').click(function () {
-            $('#status-filter').val('');
-            $('#search-input').val('');
+        // Show/hide threads based on selected status
+        if (selectedStatus) {
+            $('#thread-list .list-group-item').hide();
+            $('#thread-list .list-group-item[data-status="' + selectedStatus + '"]').show();
+        } else {
             $('#thread-list .list-group-item').show();
-        });
+        }
     });
+
+    // Filter by status
+    $('#status-filter').change(function () {
+        var selectedStatus = $(this).val();
+        // Show/hide threads based on selected status
+        if (selectedStatus) {
+            $('#thread-list .list-group-item').hide();
+            $('#thread-list .list-group-item[data-status="' + selectedStatus + '"]').show();
+        } else {
+            $('#thread-list .list-group-item').show();
+        }
+    });
+    // Search functionality
+    $('#search-input').on('input', function () {
+        var searchText = $(this).val().trim().toLowerCase();
+        // Show/hide threads based on search input
+        if (searchText) {
+            $('#thread-list .list-group-item').each(function () {
+                var threadText = $(this).text().toLowerCase();
+                if (threadText.indexOf(searchText) !== -1) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        } else {
+            $('#thread-list .list-group-item').show();
+        }
+    });
+
+    // Add click event to dropdown items
+    $('.dropdown-menu a').click(function (e) {
+        e.preventDefault();
+
+        var selectedStatus = $(this).data('value');
+
+        // Show/hide threads based on selected status
+        if (selectedStatus) {
+            $('#thread-list .list-group-item').hide();
+            $('#thread-list .list-group-item[data-status="' + selectedStatus + '"]').show();
+        } else {
+            $('#thread-list .list-group-item').show();
+        }
+    });
+
+    // Clear filters and search
+    $('#clear-button').click(function () {
+        $('#status-filter .dropdown-menu a').first().click();
+        $('#search-input').val('');
+        $('#thread-list .list-group-item').show();
+    });
+
     function toggleCollapse(button) {
         var target = document.querySelector(button.getAttribute("data-bs-target"));
         var isExpanded = target.classList.contains("show");
