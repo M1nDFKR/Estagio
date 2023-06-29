@@ -156,43 +156,42 @@ Home
                 <p>Tickets:</p>
                 <div id="ticket-list" class="list-group">
                     {% for ticket in t.tickets.all %}
+            <div class="list-group-item">
+                <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                data-bs-target="#ticket{{ ticket.id }}" aria-expanded="false"
+                aria-controls="ticket{{ ticket.id }}" onclick="toggleCollapse(this)">
+                {{ ticket.title }}
+                </button>
+                <div id="ticket{{ ticket.id }}" class="collapse">
+                <!-- Subticket details here -->
+                <p>Title: {{ ticket.title }}</p>
+                <p>Status: {{ ticket.status }}</p>
+                <p>Corpo: {{ ticket.subject_from_email }}</p>
+                <!-- Add more details as needed -->
+                <!-- Comments -->
+                <p>Comments:</p>
+                <div class="list-group comment-list">
+                    {% for comment in ticket.comments.all %}
                     <div class="list-group-item">
-                        <button class="btn btn-link" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#ticket{{ ticket.id }}" aria-expanded="false"
-                            aria-controls="ticket{{ ticket.id }}" onclick="toggleCollapse(this)">
-                            <h4 class="mb-1 truncate-text {% if ticket.status == 'F' %}closed-ticket{% endif %}">{{ticket.title }}</h4>
-                        </button>
-                        <div id="ticket{{ ticket.id }}" class="collapse">
-                            <!-- Subticket details here -->
-                            <p>Title: {{ ticket.title }}</p>
-                            <p>Status: {{ ticket.status }}</p>
-                            <p>Corpo: {{ ticket.subject_from_email }}</p>
-                            <!-- Add more details as needed -->
-                            <!-- Comments -->
-                            <p>Comments:</p>
-                            <div class="list-group comment-list">
-                                {% for comment in ticket.comments.all %}
-                                <div class="list-group-item">
-                                    <h5>{{ comment.user.username }}</h5>
-                                    <p>{{ comment.text }}</p>
-                                    <p><small>Posted on {{ comment.created_at }}</small></p>
-                                    <button class="btn btn-sm btn-danger delete-comment"
-                                        data-comment-id="{{ comment.id }}">Delete</button>
-                                </div>
-                                {% empty %}
-                                <div class="list-group-item">No comments yet.</div>
-                                {% endfor %}
-                                <div class="list-group-item">
-                                    <form class="comment-form" method="post" action="{% url 'add_comment' ticket.id %}">
-                                        {% csrf_token %}
-                                        {{ comment_form }}
-                                        <input type="submit" value="Add comment">
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                        <h5>{{ comment.user.username }}</h5>
+                        <p>{{ comment.text }}</p>
+                        <p><small>Posted on {{ comment.created_at }}</small></p>
+                        <button class="btn btn-sm btn-danger delete-comment" data-comment-id="{{ comment.id }}">Delete</button>
                     </div>
+                    {% empty %}
+                    <div class="list-group-item">No comments yet.</div>
                     {% endfor %}
+                    <div class="list-group-item">
+                        <form class="comment-form" method="post" action="{% url 'add_comment' ticket.id %}">
+                            {% csrf_token %}
+                            {{ comment_form }}
+                            <input type="submit" value="Add comment">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
                 </div>
             </div>
         </div>
