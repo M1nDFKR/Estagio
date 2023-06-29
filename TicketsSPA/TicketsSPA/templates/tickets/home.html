@@ -164,18 +164,13 @@ Home
                 <div class="list-group comment-list">
                     {% for comment in ticket.comments.all %}
                     <div class="list-group-item">
-                        <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#ticket{{ ticket.id }}"
-                            aria-expanded="false" aria-controls="ticket{{ ticket.id }}" onclick="toggleCollapse(this)">
-                            {{ ticket.title }}
-                        </button>
-                        <div id="ticket{{ ticket.id }}" class="collapse">
-                            <!-- Subticket details here -->
-                            <p>Title: {{ ticket.title }}</p>
-                            <p>Status: {{ ticket.status }}</p>
-                            <p>Corpo: {{ ticket.subject_from_email }}</p>
-                            <!-- Add more details as needed -->
+                        <h5>{{ comment.user.username }}</h5>
+                        <p>{{ comment.text }}</p>
+                        <p><small>Posted on {{ comment.created_at }}</small></p>
+                        <button class="btn btn-sm btn-danger delete-comment" data-comment-id="{{ comment.id }}">Delete</button>
                         </div>
-                    </div>
+                    {% empty %}
+                    <div class="list-group-item">No comments yet.</div>
                     {% endfor %}
                     <div class="list-group-item">
                         <form class="comment-form" method="post" action="{% url 'add_comment' ticket.id %}">
@@ -185,6 +180,8 @@ Home
                         </form>
                     </div>
                 </div>
+
+
             </div>
         </div>
         {% endfor %}
