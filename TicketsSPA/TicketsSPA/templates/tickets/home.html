@@ -96,37 +96,50 @@ Home
 
 <div class="container py-5">
     <h1 class="mb-5">Tickets Kit Escola Digital</h1>
-<<<<<<< HEAD
-    
-    <form id="ticket-filter-form" method="get">
-        {{ form.as_p }}
-        
-        <input type="submit" value="Filter">
-    </form>
+    <div class="row mb-3">
+        <div class="col-md-4 filter-container">
+            <label for="status-filter" class="form-label filter-label">Filter by Status:</label>
+            <div class="search-container">
+                <select id="status-filter" class="form-select  btn btn-secondary">
+                    <option value="">Todos</option>
+                    <option value="A">Aberto</option>
+                    <option value="F">Fechado</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4 order-container">
+            <div class="form-group">
+                <label for="search-input" class="form-label filter-label">Pesquisar:</label>
+                <div class="input-group">
+                    <input type="text" id="search-input" class="form-control" placeholder="Enter code or Assunto">
+                    <button id="clear-button" class="btn btn-secondary">Limpar filtros</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 order-container justify-content-end">
+            <div class="form-group">
+                <label for="order-dropdown" class="form-label order-label">Ordenar por:</label>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="order-dropdown"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Default
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="order-dropdown">
+                        <a class="dropdown-item" href="#" data-order="default">Normal</a>
+                        <a class="dropdown-item" href="#" data-order="recent">Mais recente</a>
+                        <a class="dropdown-item" href="#" data-order="oldest">Mais antigo</a>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
 
-    <div id="ticket-list" class="list-group">
-        {% for t in tickets %}
-        <div class="list-group-item">
-            <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#ticket{{ t.id }}"
-                aria-expanded="false" aria-controls="ticket{{ t.id }}" onclick="toggleCollapse(this)">
-                {% with cleaned_title=t.title|slice:"15:" %}
-                <h4 class="mb-1">{{ cleaned_title }}</h4>
-                {% endwith %}
-            </button>
-            <div id="ticket{{ t.id }}" class="collapse">
-                <p>Assunto: {{ t.title}}</p>
-                <p>Code: {{ t.code }}</p>
-                <p>Status: {{ t.status }}</p>
-                <p>Corpo: {{ t.subject_from_email }}</p>
-                <img src="{{ t.files }}" class="mb-1">
-                <p>Responses: {{ t.responses }}</p>
-=======
     <div id="thread-list" class="list-group">
         {% for t in threads %}
-        <div class="list-group-item">
-            <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#t{{ t.id }}" aria-expanded="false"
-                aria-controls="t{{ t.id }}" onclick="toggleCollapse(this)">
-                <h4 class="mb-1">{{ t.thread_code }}</h4>
+        <div class="list-group-item" data-status="{{ t.status }}">
+            <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#t{{ t.id }}"
+                aria-expanded="false" aria-controls="t{{ t.id }}" onclick="toggleCollapse(this)">
+                <h4 class="mb-1 truncate-text">{{ t.tickets.first.title }}</h4>
             </button>
             <div id="t{{ t.id }}" class="collapse">
                 <p>Code: {{ t.thread_code }}</p>
@@ -135,33 +148,21 @@ Home
                 <p>Tickets:</p>
                 <div id="ticket-list" class="list-group">
                     {% for ticket in t.tickets.all %}
-            <div class="list-group-item">
-                <button class="btn btn-link" type="button" data-bs-toggle="collapse"
-                data-bs-target="#ticket{{ ticket.id }}" aria-expanded="false"
-                aria-controls="ticket{{ ticket.id }}" onclick="toggleCollapse(this)">
-                {{ ticket.title }}
-                </button>
-                <div id="ticket{{ ticket.id }}" class="collapse">
-                <!-- Subticket details here -->
-                <p>Title: {{ ticket.title }}</p>
-                <p>Status: {{ ticket.status }}</p>
-                <p>Corpo: {{ ticket.subject_from_email }}</p>
-                <!-- Add more details as needed -->
-
-                <!-- Comments -->
-                <p>Comments:</p>
-                <div class="list-group comment-list">
-                    {% for comment in ticket.comments.all %}
                     <div class="list-group-item">
-                        <h5>{{ comment.user.username }}</h5>
-                        <p>{{ comment.text }}</p>
-                        <p><small>Posted on {{ comment.created_at }}</small></p>
-                        <button class="btn btn-sm btn-danger delete-comment" data-comment-id="{{ comment.id }}">Delete</button>
+                        <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#ticket{{ ticket.id }}"
+                            aria-expanded="false" aria-controls="ticket{{ ticket.id }}" onclick="toggleCollapse(this)">
+                            {{ ticket.title }}
+                        </button>
+                        <div id="ticket{{ ticket.id }}" class="collapse">
+                            <!-- Subticket details here -->
+                            <p>Title: {{ ticket.title }}</p>
+                            <p>Status: {{ ticket.status }}</p>
+                            <p>Corpo: {{ ticket.subject_from_email }}</p>
+                            <!-- Add more details as needed -->
+                        </div>
                     </div>
-                    {% empty %}
-                    <div class="list-group-item">No comments yet.</div>
                     {% endfor %}
-                </ul>
+                </div>
             </div>
         </div>
         {% empty %}
@@ -211,7 +212,9 @@ Home
 <!-- JS, Popper.js e jQuery do Bootstrap 5 -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.min.js"
+    crossorigin="anonymous"></script>
 
 <script>
     $(document).ready(function () {
@@ -276,40 +279,5 @@ Home
             button.setAttribute("aria-expanded", "true");
         }
     }
-
-    
-
-    $(document).on('click', '.pagination-link', function (e) {
-        e.preventDefault();
-        var url = $(this).attr('href');
-        loadTickets(url);
-        // Update URL without page reload
-        window.history.pushState(null, '', url);
-    });
-});
-
-$('.comment-list').on('click', '.delete-comment', function() {
-    var commentId = $(this).data('comment-id');
-    var commentElement = $(this).closest('.list-group-item');
-
-    $.ajax({
-        type: 'POST',
-        url: '/delete_comment/' + commentId + '/',
-        data: {
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-        },
-        success: function(response) {
-            if (response.status === 'ok') {
-                commentElement.remove();
-            } else {
-                alert('Failed to delete comment. Please try again.');
-            }
-        },
-        error: function() {
-            alert('An error occurred while deleting the comment. Please try again.');
-        }
-    });
-});
-
 </script>
 {% endblock %}

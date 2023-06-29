@@ -51,7 +51,7 @@ class HomeView(TemplateView):
 
         context['threads'] = page_obj
         context['comment_form'] = CommentForm()
-        context['user'] = self.request.user 
+        context['user'] = self.request.user
 
         return context
 
