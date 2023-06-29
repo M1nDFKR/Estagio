@@ -81,3 +81,4 @@ def create_ticket_instances(emails):
             # Atualizar status da thread para "Fechado"
             thread.status = ticket_instance.status
             thread.save()
+            thread.tickets.update(status='F')
