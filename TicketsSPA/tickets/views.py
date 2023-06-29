@@ -10,10 +10,10 @@ from .gmail_mirror import create_ticket_instances
 from django.core.paginator import Paginator
 from django.db.models import F
 from django.shortcuts import get_object_or_404, redirect
-from .models import Ticket,Comment
+from .models import Ticket, Comment
 from .forms import CommentForm
 from django.forms.models import model_to_dict
-
+from django.http import JsonResponse
 
 
 class LoginView(TemplateView):
@@ -61,7 +61,11 @@ def logout_view(request):
     logout(request)
     return redirect('login.html')
 
-from django.http import JsonResponse
+
+def logout_on_close(request):
+    logout(request)
+    return JsonResponse({'status': 'ok'})
+
 
 @login_required
 def add_comment(request, ticket_id):
@@ -77,15 +81,17 @@ def add_comment(request, ticket_id):
             comment.user = request.user
             comment.save()
             print(comment)
-            data['comment'] = model_to_dict(comment) # convert the comment to a dictionary
+            # convert the comment to a dictionary
+            data['comment'] = model_to_dict(comment)
             data['status'] = 'ok'
             data['comment']['user'] = {
                 'username': comment.user.username,
             }
-            data['comment']['created_at'] = comment.created_at.strftime('%Y-%m-%d %H:%M:%S')
+            data['comment']['created_at'] = comment.created_at.strftime(
+                '%Y-%m-%d %H:%M:%S')
         else:
             data['status'] = 'error'
-    return JsonResponse(data) 
+    return JsonResponse(data)
 
 
 def delete_comment(request, comment_id):
