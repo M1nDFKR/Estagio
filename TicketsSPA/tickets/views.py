@@ -4,16 +4,16 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from .models import Ticket, TicketThread
+from .models import Ticket, TicketThread, Comment
 from .gmail_mirror import get_emails
 from .gmail_mirror import create_ticket_instances
 from django.core.paginator import Paginator
 from django.db.models import F
 from django.shortcuts import get_object_or_404, redirect
-from .models import Ticket, Comment
 from .forms import CommentForm
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 
 
 class LoginView(TemplateView):
@@ -43,7 +43,7 @@ class HomeView(TemplateView):
         emails = get_emails()
         create_ticket_instances(emails)
         tickets = Ticket.objects.all()
-        threads = TicketThread.objects.all()
+        threads = TicketThread.objects.order_by('created_at')
         paginator = Paginator(threads, self.paginate_by)
 
         page_number = self.request.GET.get('page')
@@ -94,6 +94,7 @@ def add_comment(request, ticket_id):
     return JsonResponse(data)
 
 
+@require_POST
 def delete_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     if request.method == 'POST':

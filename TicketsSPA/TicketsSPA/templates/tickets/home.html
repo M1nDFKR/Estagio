@@ -214,7 +214,7 @@ Home
                             <p>Comments:</p>
                             <div class="list-groupcomment-list">
                                 {% for comment in ticket.comments.all %}
-                                <div class="list-group-item">
+                                <div class="list-group-item" id="comment-{{ comment.id }}">
                                     <h5>{{ comment.user.username }}</h5>
                                     <p>{{ comment.text }}</p>
                                     <p><small>Posted on {{ comment.created_at }}</small></p>
@@ -417,5 +417,27 @@ Home
             }
         });
     });
+        $(document).ready(function(){
+        $('.delete-comment').click(function(e){
+            e.preventDefault();
+            var commentId = $(this).data('comment-id');
+            $.ajax({
+                url: '/delete_comment/' + commentId + '/',
+                type: 'POST',
+                data: {
+                    'comment_id': commentId,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function(response){
+                    if(response.status == 'ok'){
+                        $('#comment-' + commentId).remove();
+                    }else{
+                        // handle error here
+                    }
+                }
+            });
+        });
+    });
+
 </script>
 {% endblock %}
