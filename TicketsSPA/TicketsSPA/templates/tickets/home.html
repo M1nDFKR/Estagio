@@ -90,6 +90,18 @@ Home
     .btn.btn-link {
         text-decoration: none;
     }
+    .pagination-wrapper {
+        margin-top: .5rem; 
+    }
+
+    .list-groupcomment-list {
+        border-top: 1px solid rgb(0, 60, 255);
+        border-bottom: 1px solid rgb(0, 60, 255);
+        border-right: 1px solid rgb(0, 60, 255);
+        border-left: 1px solid rgb(0, 60, 255);     
+    }
+
+
 </style>
 {% endblock %}
 
@@ -200,7 +212,7 @@ Home
                             <!-- Add more details as needed -->
                             <!-- Comments -->
                             <p>Comments:</p>
-                            <div class="list-group comment-list">
+                            <div class="list-groupcomment-list">
                                 {% for comment in ticket.comments.all %}
                                 <div class="list-group-item">
                                     <h5>{{ comment.user.username }}</h5>
@@ -235,6 +247,7 @@ Home
         <div class="list-group-item">Não existem tickets no momento.</div>
         {% endfor %}
     </div>
+    <div class="pagination-wrapper"></div>
     <nav aria-label="Page navigation">
         <ul class="pagination">
             {% if threads.has_previous %}
