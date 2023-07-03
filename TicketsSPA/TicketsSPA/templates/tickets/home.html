@@ -205,24 +205,21 @@ Home
                             </div>
                         </button>
                         <div id="ticket{{ ticket.id }}" class="collapse">
-                            <!-- Subticket details here -->
                             <p>Title: {{ ticket.title }}</p>
                             <p>Status: {{ ticket.status }}</p>
                             <p>Corpo: {{ ticket.subject_from_email }}</p>
-                            <!-- Add more details as needed -->
-                            <!-- Comments -->
                             <p>Comments:</p>
                             <div class="list-groupcomment-list">
                                 {% for comment in ticket.comments.all %}
-                                <div class="list-group-item" id="comment-{{ comment.id }}">
-                                    <h5>{{ comment.user.username }}</h5>
-                                    <p>{{ comment.text }}</p>
-                                    <p><small>Posted on {{ comment.created_at }}</small></p>
-                                    <button class="btn btn-sm btn-danger delete-comment"
-                                        data-comment-id="{{ comment.id }}">Delete</button>
-                                </div>
-                                {% empty %}
-                                {% endfor %}
+    <div class="list-group-item" id="comment-{{ comment.id }}">
+        <h5>{{ comment.user.username }}</h5>
+        <p>{{ comment.text }}</p>
+        <p><small>Posted on {{ comment.created_at }}</small></p>
+        <button class="btn btn-sm btn-danger delete-comment" data-comment-id="{{ comment.id }}">Delete</button>
+        </div>
+        {% empty %}
+        {% endfor %}
+
                                 <div class="list-group-item">
                                     <form class="comment-form" method="post" action="{% url 'add_comment' ticket.id %}">
                                         {% csrf_token %}
@@ -380,12 +377,12 @@ Home
             dataType: 'json',
             success: function (data) {
                 // Create new comment element
-                var newComment = '<div class="list-group-item">' +
-                    '<h5>' + data.comment.user.username + '</h5>' +
-                    '<p>' + data.comment.text + '</p>' +
-                    '<p><small>Posted on ' + data.comment.created_at + '</small></p>' +
-                    '<button class="btn btn-sm btn-danger delete-comment" data-comment-id="{{ comment.id }}">Delete</button>' +
-                    '</div>';
+                var newComment = '<div class="list-group-item" id="comment-' + data.comment.id + '">' +
+    '<h5>' + data.comment.user.username + '</h5>' +
+    '<p>' + data.comment.text + '</p>' +
+    '<p><small>Posted on ' + data.comment.created_at + '</small></p>' +
+    '<button class="btn btn-sm btn-danger delete-comment" data-comment-id="' + data.comment.id + '">Delete</button>' +
+    '</div>';
                 // Append new comment to the correct form's comment list
                 form.parent().parent().find('.list-group-item:nth-last-child(1)').before(newComment);
                 // Clear the form
@@ -396,29 +393,10 @@ Home
             }
         });
     });
-    $('.comment-list').on('click', '.delete-comment', function () {
-        var commentId = $(this).data('comment-id');
-        var commentElement = $(this).closest('.list-group-item');
-        $.ajax({
-            type: 'POST',
-            url: '/delete_comment/' + commentId + '/',
-            data: {
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-            },
-            success: function (response) {
-                if (response.status === 'ok') {
-                    commentElement.remove();
-                } else {
-                    alert('Failed to delete comment. Please try again.');
-                }
-            },
-            error: function () {
-                alert('An error occurred while deleting the comment. Please try again.');
-            }
-        });
-    });
+    
+    
         $(document).ready(function(){
-        $('.delete-comment').click(function(e){
+            $(document).on('click', '.delete-comment', function(e){
             e.preventDefault();
             var commentId = $(this).data('comment-id');
             $.ajax({

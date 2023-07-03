@@ -32,7 +32,7 @@ class LoginView(TemplateView):
 
 class HomeView(TemplateView):
     template_name = 'home/home.html'
-    paginate_by = 10  # Number of tickets per page
+    paginate_by = 3  # Number of tickets per page
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
