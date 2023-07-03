@@ -69,7 +69,7 @@ Home
     }
 
     .closed-ticket {
-        color: rgba(214, 3, 3, 0.774);
+        color: rgb(2, 5, 54);
     }
 
     .closed-ticketthread {
@@ -91,7 +91,7 @@ Home
         text-decoration: none;
     }
     .pagination-wrapper {
-        margin-top: .5rem; 
+        margin-bottom: 1.2rem;
     }
 
     .list-groupcomment-list {
@@ -99,6 +99,10 @@ Home
         border-bottom: 1px solid rgb(0, 60, 255);
         border-right: 1px solid rgb(0, 60, 255);
         border-left: 1px solid rgb(0, 60, 255);     
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
     }
 
 
@@ -188,9 +192,7 @@ Home
 
             </button>
             <div id="t{{ t.id }}" class="collapse">
-                <p>Code: {{ t.thread_code }}</p>
                 <p>Created: {{ t.created_at }}</p>
-                <p>Status: {{ t.status }}</p>
                 <p>Tickets:</p>
                 <div id="ticket-list" class="list-group">
                     {% for ticket in t.tickets.all %}
@@ -206,12 +208,10 @@ Home
                         </button>
                         <div id="ticket{{ ticket.id }}" class="collapse">
                             <!-- Subticket details here -->
-                            <p>Title: {{ ticket.title }}</p>
                             <p>Status: {{ ticket.status }}</p>
                             <p>Corpo: {{ ticket.subject_from_email }}</p>
-                            <!-- Add more details as needed -->
                             <!-- Comments -->
-                            <p>Comments:</p>
+                            <p>Comentários:</p>
                             <div class="list-groupcomment-list">
                                 {% for comment in ticket.comments.all %}
                                 <div class="list-group-item" id="comment-{{ comment.id }}">
@@ -226,7 +226,7 @@ Home
                                 <div class="list-group-item">
                                     <form class="comment-form" method="post" action="{% url 'add_comment' ticket.id %}">
                                         {% csrf_token %}
-                                        <div class="form-group">
+                                        <div class="form-group ">
                                             <label for="{{ comment_form.text.id_for_label }}">Escreva aqui o seu
                                                 comentário:</label>
                                             <textarea class="form-control" id="{{ comment_form.text.id_for_label }}"
